@@ -1,0 +1,3 @@
+project=typinggame_server
+test=rspec
+template=erb
