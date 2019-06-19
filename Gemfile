@@ -5,6 +5,7 @@ gem 'hanami',       '~> 1.3'
 gem 'hanami-model', '~> 1.3'
 gem 'rubocop'
 gem 'prettier'
+gem 'plezi'
 
 gem 'pg'
 
