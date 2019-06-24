@@ -1,2 +1,1 @@
-module TypinggameServer
-end
+module TypinggameServer; end

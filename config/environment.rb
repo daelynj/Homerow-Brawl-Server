@@ -24,7 +24,7 @@ Hanami.configure do
     # Migrations
     #
     migrations 'db/migrations'
-    schema     'db/schema.sql'
+    schema 'db/schema.sql'
   end
 
   mailer do
@@ -43,7 +43,8 @@ Hanami.configure do
     logger level: :info, formatter: :json, filter: []
 
     mailer do
-      delivery :smtp, address: ENV.fetch('SMTP_HOST'), port: ENV.fetch('SMTP_PORT')
+      delivery :smtp,
+               address: ENV.fetch('SMTP_HOST'), port: ENV.fetch('SMTP_PORT')
     end
   end
 end
