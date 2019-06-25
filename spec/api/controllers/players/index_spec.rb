@@ -19,7 +19,7 @@ RSpec.describe Api::Controllers::Players::Index, type: :action do
       expect(response[0]).to eq(200)
     end
 
-    it 'is exposes the retrieved players' do
+    it 'exposes the retrieved players' do
       allow(interactor).to fetch_all_players
       action.call(params)
 

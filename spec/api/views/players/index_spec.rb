@@ -17,6 +17,6 @@ RSpec.describe Api::Views::Players::Index, type: :view do
   end
 
   def serialized
-    { players: [{ id: players.id }] }.to_json
+    [{ id: players.id }].to_json
   end
 end
