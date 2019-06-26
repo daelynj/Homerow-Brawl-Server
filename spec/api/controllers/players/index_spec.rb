@@ -1,36 +1,28 @@
 require 'spec_helper'
 
 RSpec.describe Api::Controllers::Players::Index, type: :action do
-  let(:interactor) { instance_double(Interactors::Players::FetchAllPlayers) }
+  let(:repository) { PlayerRepository.new }
+  let(:interactor) do
+    Interactors::Players::FetchAllPlayers.new(repository: repository)
+  end
   let(:action) { described_class.new(interactor: interactor) }
   let(:params) { Hash[] }
-  let(:players) { [instance_double(Player)] }
-  let(:interactor_response) { Hanami::Interactor::Result.new(players: players) }
 
-  describe '#call' do
-    it 'fetchs the players' do
-      expect(interactor).to fetch_all_players
-      action.call(params)
-    end
+  before do
+    repository.clear
 
-    it 'is successful' do
-      allow(interactor).to fetch_all_players
-      response = action.call(params)
-      expect(response[0]).to eq(200)
-    end
-
-    it 'exposes the retrieved players' do
-      allow(interactor).to fetch_all_players
-      action.call(params)
-
-      retrieved_players = action.exposures[:players]
-      expect(retrieved_players).to eq(players)
-    end
+    repository.create(id: '1')
   end
 
-  private
+  it 'is successful' do
+    response = action.call(params)
+    expect(response[0]).to eq(200)
+  end
 
-  def fetch_all_players
-    receive(:call).and_return(interactor_response)
+  it 'exposes all players' do
+    action.call(params)
+    players = action.exposures[:players]
+
+    expect(players.first.id).to eq(1)
   end
 end
