@@ -6,11 +6,8 @@ module Api
 
         expose :players
 
-        def initialize(dependencies = {})
-          @interactor =
-            dependencies.fetch(:interactor) do
-              Interactors::Players::FetchAllPlayers.new
-            end
+        def initialize(interactor: Interactors::Players::FetchAllPlayers.new)
+          @interactor = interactor
         end
 
         def call(_params)

@@ -7,9 +7,8 @@ module Interactors
 
       expose :players
 
-      def initialize(dependencies = {})
-        @players_repository =
-          dependencies.fetch(:repository) { PlayerRepository.new }
+      def initialize(repository: PlayerRepository.new)
+        @players_repository = repository
       end
 
       def call
