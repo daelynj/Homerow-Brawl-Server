@@ -12,17 +12,21 @@ RSpec.describe Api::Controllers::Players::Index, type: :action do
     repository.clear
 
     repository.create(id: '1')
+    repository.create(id: '2')
   end
 
-  it 'is successful' do
-    response = action.call(params)
-    expect(response[0]).to eq(200)
-  end
+  context 'good input' do
+    it 'is successful' do
+      response = action.call(params)
 
-  it 'exposes all players' do
-    action.call(params)
-    players = action.exposures[:players]
+      expect(response[0]).to eq(200)
+    end
 
-    expect(players.first.id).to eq(1)
+    it 'exposes all players' do
+      action.call(params)
+
+      expect(action.players.first.id).to eq(1)
+      expect(action.players.length).to eq(2)
+    end
   end
 end
