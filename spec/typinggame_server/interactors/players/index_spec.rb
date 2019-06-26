@@ -1,10 +1,10 @@
 require 'spec_helper'
 
 describe Interactors::Players::Index do
-  let(:repository) { instance_double(PlayersRepository) }
+  let(:repository) { instance_double(PlayerRepository) }
   let(:interactor) { described_class.new(repository: repository) }
 
-  let(:players) { [instance_double(Players)] }
+  let(:players) { [instance_double(Player)] }
 
   describe '#call' do
     it 'fetchs all players' do

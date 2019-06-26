@@ -13,7 +13,7 @@ RSpec.describe Api::Views::Players::Index, type: :view do
   private
 
   def build_players
-    object_double(Players.new, id: '1')
+    object_double(Player.new, id: '1')
   end
 
   def serialized

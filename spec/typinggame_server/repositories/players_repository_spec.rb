@@ -1,3 +1,3 @@
-RSpec.describe PlayersRepository, type: :repository do
+RSpec.describe PlayerRepository, type: :repository do
   # place your tests here
 end

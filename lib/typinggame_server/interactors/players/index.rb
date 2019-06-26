@@ -11,7 +11,7 @@ module Interactors
 
       def initialize(dependencies = {})
         @players_repository =
-          dependencies.fetch(:repository) { PlayersRepository.new }
+          dependencies.fetch(:repository) { PlayerRepository.new }
       end
 
       def call

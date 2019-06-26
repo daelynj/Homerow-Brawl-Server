@@ -4,7 +4,7 @@ RSpec.describe Api::Controllers::Players::Index, type: :action do
   let(:interactor) { instance_double(Interactors::Players::Index) }
   let(:action) { described_class.new(interactor: interactor) }
   let(:params) { Hash[] }
-  let(:players) { [instance_double(Players)] }
+  let(:players) { [instance_double(Player)] }
   let(:interactor_response) { Hanami::Interactor::Result.new(players: players) }
 
   describe '#call' do

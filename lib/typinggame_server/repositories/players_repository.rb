@@ -1,2 +1,1 @@
-class PlayersRepository < Hanami::Repository
-end
+class PlayerRepository < Hanami::Repository; end
