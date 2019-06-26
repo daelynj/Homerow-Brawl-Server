@@ -1,10 +1,8 @@
-# frozen_string_literal: true
-
 require 'hanami/interactor'
 
 module Interactors
   module Players
-    class Index
+    class FetchAllPlayers
       include Hanami::Interactor
 
       expose :players

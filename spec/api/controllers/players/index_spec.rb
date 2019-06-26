@@ -1,7 +1,7 @@
 require 'spec_helper'
 
 RSpec.describe Api::Controllers::Players::Index, type: :action do
-  let(:interactor) { instance_double(Interactors::Players::Index) }
+  let(:interactor) { instance_double(Interactors::Players::FetchAllPlayers) }
   let(:action) { described_class.new(interactor: interactor) }
   let(:params) { Hash[] }
   let(:players) { [instance_double(Player)] }

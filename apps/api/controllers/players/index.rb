@@ -8,12 +8,13 @@ module Api
 
         def initialize(dependencies = {})
           @interactor =
-            dependencies.fetch(:interactor) { Interactors::Players::Index.new }
+            dependencies.fetch(:interactor) do
+              Interactors::Players::FetchAllPlayers.new
+            end
         end
 
         def call(_params)
-          result = @interactor.call
-          @players = result.players
+          @players = @interactor.call.players
         end
       end
     end

@@ -1,6 +1,6 @@
 require 'spec_helper'
 
-describe Interactors::Players::Index do
+describe Interactors::Players::FetchAllPlayers do
   let(:repository) { instance_double(PlayerRepository) }
   let(:interactor) { described_class.new(repository: repository) }
 
