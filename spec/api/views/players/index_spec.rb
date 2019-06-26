@@ -1,22 +1,27 @@
 require 'spec_helper'
 
 RSpec.describe Api::Views::Players::Index, type: :view do
-  let(:players) { build_players }
-  let(:exposures) { Hash[players: [players]] }
+  let(:exposures) { Hash[players: []] }
   let(:view) { described_class.new(nil, exposures) }
   let(:rendered) { view.render }
 
-  it 'exposes players' do
-    expect(rendered).to eq(serialized)
+  context 'when there are no players' do
+    it 'renders an empty list' do
+      expect(rendered).to eq('[]')
+    end
   end
 
-  private
+  context 'when there are players' do
+    let(:players) { [Player.new(id: '1'), Player.new(id: '2')] }
+    let(:exposures) { Hash[players: players] }
 
-  def build_players
-    object_double(Player.new, id: '1')
-  end
+    it 'lists them all' do
+      expect(rendered).to include('1')
+      expect(rendered).to include('2')
+    end
 
-  def serialized
-    [{ id: players.id }].to_json
+    it 'lists them as json' do
+      expect(rendered).to eq([{ "id": 1 }, { "id": 2 }].to_json)
+    end
   end
 end
