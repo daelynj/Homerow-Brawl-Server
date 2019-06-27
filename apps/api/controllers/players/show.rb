@@ -4,7 +4,16 @@ module Api
       class Show
         include Api::Action
 
+        expose :player
+
+        def initialize(interactor: Interactors::Players::FetchPlayer.new)
+          @interactor = interactor
+        end
+
         def call(params)
+          player = @interactor.call(params[:id]).player
+          halt 400 && self.status = 400 unless !player.nil?
+          @player = player
         end
       end
     end
