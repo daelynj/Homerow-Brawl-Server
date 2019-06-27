@@ -5,8 +5,6 @@ describe Interactors::Players::FetchAllPlayers do
   let(:interactor) { described_class.new(repository: repository) }
 
   before do
-    repository.clear
-
     repository.create(id: '1')
     repository.create(id: '2')
   end
