@@ -1,10 +1,18 @@
-RSpec.describe Api::Views::Players::Create, type: :view do
-  let(:exposures) { Hash[format: :html] }
-  let(:template)  { Hanami::View::Template.new('apps/api/templates/players/create.html.erb') }
-  let(:view)      { described_class.new(template, exposures) }
-  let(:rendered)  { view.render }
+require 'spec_helper'
+require 'securerandom'
 
-  it 'exposes #format' do
-    expect(view.format).to eq exposures.fetch(:format)
+RSpec.describe Api::Views::Players::Create, type: :view do
+  let(:exposures) { Hash[player: []] }
+  let(:view) { described_class.new(nil, exposures) }
+  let(:rendered) { view.render }
+
+  context 'when there are players' do
+    let(:uuid) { SecureRandom.uuid }
+    let(:player) { Player.new(token: uuid) }
+    let(:exposures) { Hash[player: player] }
+
+    it 'lists the UUID as json' do
+      expect(rendered).to eq({ "uuid": uuid }.to_json)
+    end
   end
 end
