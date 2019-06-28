@@ -9,8 +9,6 @@ RSpec.describe Api::Controllers::Players::Index, type: :action do
   let(:params) { Hash[] }
 
   before do
-    repository.clear
-
     repository.create(id: '1')
     repository.create(id: '2')
   end
