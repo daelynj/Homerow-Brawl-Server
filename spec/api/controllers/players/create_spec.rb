@@ -6,16 +6,14 @@ RSpec.describe Api::Controllers::Players::Create, type: :action do
   let(:action) { described_class.new(interactor: interactor) }
   let(:params) { Hash[] }
 
-  context 'good input' do
-    it 'is successful' do
-      response = action.call(params)
+  it 'is successful' do
+    response = action.call(params)
 
-      expect(response[0]).to eq(200)
-    end
+    expect(response[0]).to eq(200)
+  end
 
-    it 'exposes a player' do
-      action.call(params)
-      expect(action.player).to have_attributes(id: Integer)
-    end
+  it 'exposes a player' do
+    action.call(params)
+    expect(action.player).to have_attributes(id: Integer)
   end
 end
