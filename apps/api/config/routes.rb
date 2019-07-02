@@ -5,3 +5,4 @@
 # get '/hello', to: ->(env) { [200, {}, ['Hello from Hanami!']] }
 get '/players', to: 'players#index'
 delete '/players', to: 'players#destroy'
+post '/players', to: 'players#create'
