@@ -12,7 +12,7 @@ module Api
 
         def call(params)
           player = @interactor.call(params[:id]).player
-          halt 400 && self.status = 400 if player.nil?
+          halt 404 if player.nil?
           @player = player
         end
       end

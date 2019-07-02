@@ -6,13 +6,11 @@ describe Interactors::Players::FetchPlayer do
   let(:params) { 1 }
 
   before do
-    repository.clear
-
     repository.create(id: '1')
     repository.create(id: '2')
   end
 
-  context 'good input' do
+  context 'When the player exists' do
     let(:result) { interactor.call(params) }
 
     it 'succeeds' do
