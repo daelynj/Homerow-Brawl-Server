@@ -6,6 +6,8 @@ require_relative '../apps/web/application'
 require_relative '../apps/api/application'
 
 Hanami.configure do
+  middleware.use Plezi
+
   mount Api::Application, at: '/api'
   mount Web::Application, at: '/'
 
