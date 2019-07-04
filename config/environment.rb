@@ -4,8 +4,11 @@ require 'hanami/model'
 require_relative '../lib/typinggame_server'
 require_relative '../apps/web/application'
 require_relative '../apps/api/application'
+require_relative '../lib/middleware/websocket/websocket_connection'
 
 Hanami.configure do
+  middleware.use WebsocketConnection
+
   mount Api::Application, at: '/api'
   mount Web::Application, at: '/'
 
