@@ -1,3 +1,5 @@
+require './lib/middleware/websocket/client'
+
 module Websocket
   class Controller
     attr_reader :clients
@@ -6,21 +8,22 @@ module Websocket
       @clients = []
     end
 
-    def on_open(client)
-      @clients << client
-      puts 'Websocket connection established on the server.'
-      client.write 'ack from the server'
+    def on_open(incoming_client)
+      @clients <<
+        Client.new(
+          connection_client: incoming_client, client_id: @clients.length + 1
+        )
     end
 
-    def on_message(client, data)
+    def on_message(incoming_client, data)
       puts data
     end
 
-    def on_shutdown(client)
+    def on_shutdown(incoming_client)
       puts 'socket closing from the server'
     end
 
-    def on_close(client)
+    def on_close(incoming_client)
       puts 'websocket closed from the server'
     end
   end
