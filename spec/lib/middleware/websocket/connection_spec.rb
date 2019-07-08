@@ -1,8 +1,8 @@
 require 'spec_helper'
 
-RSpec.describe WebsocketConnection do
+RSpec.describe Websocket::Connection do
   let(:app) { double }
-  let(:websocket_connection) { WebsocketConnection.new(app) }
+  let(:websocket_connection) { described_class.new(app) }
   let(:env) { { 'rack.upgrade?' => rack_upgrade?, 'rack.upgrade' => nil } }
 
   describe '#call' do
@@ -22,7 +22,7 @@ RSpec.describe WebsocketConnection do
 
       it 'upgrades the connection' do
         subject
-        expect(env['rack.upgrade']).to be_kind_of(WebsocketController)
+        expect(env['rack.upgrade']).to be_kind_of(Websocket::Controller)
       end
 
       it 'returns a 200 status' do
