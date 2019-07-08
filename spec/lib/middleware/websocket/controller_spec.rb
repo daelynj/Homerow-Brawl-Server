@@ -1,8 +1,8 @@
 require 'spec_helper'
 
 RSpec.describe Websocket::Controller do
-  let(:incoming_client_1) { double }
-  let(:incoming_client_2) { double }
+  let(:incoming_client_1) { double(write: nil) }
+  let(:incoming_client_2) { double(write: nil) }
   let (:controller) do
     described_class.new
   end
@@ -58,6 +58,21 @@ RSpec.describe Websocket::Controller do
       controller.on_open(incoming_client_2)
 
       expect(subject.first).to eq(controller.clients[1])
+    end
+  end
+
+  describe '#update_all_clients' do
+    subject { controller.update_all_clients }
+    #let(:obj) { double(:write) }
+
+    it 'calls the write method on each client' do
+      controller.on_open(incoming_client_1)
+      controller.on_open(incoming_client_2)
+      payload = controller.build_payload
+
+      expect(incoming_client_1).to receive(:write).with(payload)
+      expect(incoming_client_2).to receive(:write).with(payload)
+      subject
     end
   end
 end

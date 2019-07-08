@@ -13,7 +13,8 @@ module Websocket
     end
 
     def on_message(incoming_client, data)
-      puts data
+      #update the Client in question
+      #update_all_clients
     end
 
     def on_shutdown(incoming_client)
@@ -34,6 +35,10 @@ module Websocket
 
     def find_client(incoming_client)
       @clients.select { |client| client.connection_client == incoming_client }
+    end
+
+    def update_all_clients
+      @clients.each { |client| client.connection_client.write(build_payload) }
     end
   end
 end
