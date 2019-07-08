@@ -24,7 +24,10 @@ module Websocket
     end
 
     def on_close(incoming_client)
-      puts 'websocket closed from the server'
+      closing_client =
+        @clients.select { |client| client.connection_client == incoming_client }
+
+      @clients -= closing_client
     end
   end
 end

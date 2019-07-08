@@ -29,4 +29,19 @@ RSpec.describe Websocket::Controller do
       expect(controller.clients[1].client_id).to eq(2)
     end
   end
+
+  describe '#on_close' do
+    subject { controller.on_close(incoming_client_2) }
+
+    it 'removes the closing client from the list of clients' do
+      controller.on_open(incoming_client_1)
+      controller.on_open(incoming_client_2)
+      subject
+
+      clients = controller.clients
+
+      expect(clients.length).to eq(1)
+      expect(clients.first.connection_client).to eq(incoming_client_1)
+    end
+  end
 end
