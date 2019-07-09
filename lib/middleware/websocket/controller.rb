@@ -26,9 +26,5 @@ module Websocket
     def on_close(client)
       @client_interactor.delete_client(incoming_client: client)
     end
-
-    def update_all_clients
-      @clients.each { |client| client.connection_client.write(build_payload) }
-    end
   end
 end
