@@ -9,10 +9,7 @@ module Websocket
     end
 
     def on_open(incoming_client)
-      @clients <<
-        Client.new(
-          connection_client: incoming_client, client_id: @clients.length + 1
-        )
+      @clients << Client.new(connection_client: incoming_client)
     end
 
     def on_message(incoming_client, data)
@@ -26,7 +23,6 @@ module Websocket
     def on_close(incoming_client)
       closing_client =
         @clients.select { |client| client.connection_client == incoming_client }
-
       @clients -= closing_client
     end
   end

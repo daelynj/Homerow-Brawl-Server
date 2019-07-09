@@ -20,14 +20,6 @@ RSpec.describe Websocket::Controller do
 
       expect(client.connection_client).to eq(incoming_client_1)
     end
-
-    it 'assigns an incremental ID to an incoming client' do
-      subject
-      controller.on_open(incoming_client_2)
-
-      expect(controller.clients[0].client_id).to eq(1)
-      expect(controller.clients[1].client_id).to eq(2)
-    end
   end
 
   describe '#on_close' do
