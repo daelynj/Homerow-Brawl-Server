@@ -1,8 +1,8 @@
 require 'spec_helper'
 
 RSpec.describe Websocket::Controller do
-  let(:incoming_client_1) { double }
-  let(:incoming_client_2) { double }
+  let(:incoming_client_1) { double(write: nil) }
+  let(:incoming_client_2) { double(write: nil) }
   let (:controller) do
     described_class.new
   end
@@ -25,9 +25,12 @@ RSpec.describe Websocket::Controller do
   describe '#on_close' do
     subject { controller.on_close(incoming_client_2) }
 
-    it 'removes the closing client from the list of clients' do
+    before do
       controller.on_open(incoming_client_1)
       controller.on_open(incoming_client_2)
+    end
+
+    it 'removes the closing client from the list of clients' do
       subject
 
       clients = controller.clients
@@ -40,10 +43,12 @@ RSpec.describe Websocket::Controller do
   describe '#build_payload' do
     subject { controller.build_payload }
 
-    it 'builds the expected payload' do
+    before do
       controller.on_open(incoming_client_1)
       controller.on_open(incoming_client_2)
+    end
 
+    it 'builds the expected payload' do
       expected_JSON = '{"players":[{"position":0},{"position":0}]}'
 
       expect(subject).to eq(expected_JSON)
@@ -53,11 +58,28 @@ RSpec.describe Websocket::Controller do
   describe '#find_client' do
     subject { controller.find_client(incoming_client_2) }
 
-    it 'returns the requested client' do
+    before do
       controller.on_open(incoming_client_1)
       controller.on_open(incoming_client_2)
+    end
 
+    it 'returns the requested client' do
       expect(subject.first).to eq(controller.clients[1])
+    end
+  end
+
+  describe '#update_all_clients' do
+    subject { controller.update_all_clients }
+
+    before do
+      controller.on_open(incoming_client_1)
+      controller.on_open(incoming_client_2)
+    end
+
+    it 'calls the write method on each client' do
+      expect(incoming_client_1).to receive(:write)
+      expect(incoming_client_2).to receive(:write)
+      subject
     end
   end
 end
