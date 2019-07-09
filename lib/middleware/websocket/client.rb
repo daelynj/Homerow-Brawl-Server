@@ -1,11 +1,9 @@
-require './lib/middleware/websocket/controller'
-
 module Websocket
   class Client
-    attr_reader :controller
+    attr_reader :connection_client
 
-    def initialize
-      @controller = Controller.new
+    def initialize(connection_client: client)
+      @connection_client = connection_client
     end
   end
 end
