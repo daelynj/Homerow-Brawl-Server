@@ -6,7 +6,7 @@ module Websocket
     def initialize(connection_client: client)
       @connection_client = connection_client
       @position = '0%'
-      @client_attributes = { 'id' => @client_id, 'position' => @position }
+      @client_attributes = { 'position' => @position }
     end
   end
 end
