@@ -44,7 +44,7 @@ RSpec.describe Websocket::Controller do
       controller.on_open(incoming_client_1)
       controller.on_open(incoming_client_2)
 
-      expected_JSON = '{"players":[{"position":"0%"},{"position":"0%"}]}'
+      expected_JSON = '{"players":[{"position":0},{"position":0}]}'
 
       expect(subject).to eq(expected_JSON)
     end
