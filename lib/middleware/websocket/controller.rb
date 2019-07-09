@@ -21,9 +21,19 @@ module Websocket
     end
 
     def on_close(incoming_client)
-      closing_client =
-        @clients.select { |client| client.connection_client == incoming_client }
+      closing_client = find_client(incoming_client)
       @clients -= closing_client
+    end
+
+    def build_payload
+      players = []
+      @clients.each { |client| players << client.client_attributes }
+
+      { 'players' => players }.to_json
+    end
+
+    def find_client(incoming_client)
+      @clients.select { |client| client.connection_client == incoming_client }
     end
   end
 end

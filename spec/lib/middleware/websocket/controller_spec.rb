@@ -36,4 +36,28 @@ RSpec.describe Websocket::Controller do
       expect(clients.first.connection_client).to eq(incoming_client_1)
     end
   end
+
+  describe '#build_payload' do
+    subject { controller.build_payload }
+
+    it 'builds the expected payload' do
+      controller.on_open(incoming_client_1)
+      controller.on_open(incoming_client_2)
+
+      expected_JSON = '{"players":[{"position":0},{"position":0}]}'
+
+      expect(subject).to eq(expected_JSON)
+    end
+  end
+
+  describe '#find_client' do
+    subject { controller.find_client(incoming_client_2) }
+
+    it 'returns the requested client' do
+      controller.on_open(incoming_client_1)
+      controller.on_open(incoming_client_2)
+
+      expect(subject.first).to eq(controller.clients[1])
+    end
+  end
 end
