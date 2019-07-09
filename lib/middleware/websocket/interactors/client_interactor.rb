@@ -11,10 +11,7 @@ module Websocket
       end
 
       def create_client(incoming_client: client)
-        @clients <<
-          Client.new(
-            connection_client: incoming_client, client_id: @clients.length + 1
-          )
+        @clients << Client.new(connection_client: incoming_client)
       end
 
       def delete_client(incoming_client: client)

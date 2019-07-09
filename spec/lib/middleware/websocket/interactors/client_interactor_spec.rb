@@ -14,15 +14,6 @@ RSpec.describe Websocket::Interactor::ClientInteractor do
 
       expect(client.connection_client).to eq(client_1)
     end
-
-    it 'assigns an incremental ID to an incoming client' do
-      subject
-      client_interactor.create_client(incoming_client: client_2)
-      clients = client_interactor.clients
-
-      expect(clients[0].client_attributes['id']).to eq(1)
-      expect(clients[1].client_attributes['id']).to eq(2)
-    end
   end
 
   describe '#delete_client' do
