@@ -1,44 +1,30 @@
-require './lib/middleware/websocket/client'
+require './lib/middleware/websocket/interactors/client_interactor'
 
 module Websocket
   class Controller
-    attr_reader :clients
+    attr_reader :client_interactor
 
     def initialize
-      @clients = []
+      @client_interactor = Interactor::ClientInteractor.new
     end
 
-    def on_open(incoming_client)
-      @clients << Client.new(connection_client: incoming_client)
+    def on_open(client)
+      @client_interactor.create_client(incoming_client: client)
+
+      @client_interactor.update_all_clients
     end
 
-    def on_message(incoming_client, data)
+    def on_message(client, data)
       #update the Client in question
       #update_all_clients
     end
 
-    def on_shutdown(incoming_client)
+    def on_shutdown(client)
       puts 'socket closing from the server'
     end
 
-    def on_close(incoming_client)
-      closing_client = find_client(incoming_client)
-      @clients -= closing_client
-    end
-
-    def build_payload
-      players = []
-      @clients.each { |client| players << client.client_attributes }
-
-      { 'players' => players }.to_json
-    end
-
-    def find_client(incoming_client)
-      @clients.select { |client| client.connection_client == incoming_client }
-    end
-
-    def update_all_clients
-      @clients.each { |client| client.connection_client.write(build_payload) }
+    def on_close(client)
+      @client_interactor.delete_client(incoming_client: client)
     end
   end
 end
