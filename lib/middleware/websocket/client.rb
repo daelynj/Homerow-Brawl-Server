@@ -8,6 +8,9 @@ module Websocket
     def initialize(connection:)
       @connection = connection
       @position = 0
+    end
+
+    def generate_player
       player = CreatePlayer.new.call
       @uuid = player['uuid']
       @id = player['id']

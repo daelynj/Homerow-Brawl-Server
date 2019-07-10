@@ -10,7 +10,7 @@ module Websocket
     end
 
     def on_open(connection)
-      @clients << Client.new(connection: connection)
+      generate_client(connection: connection)
 
       Interactor::UpdateAllClients.new.call(clients: @clients)
     end
@@ -30,7 +30,12 @@ module Websocket
 
     private
 
-    def find_client(connection: connection)
+    def generate_client(connection:)
+      @clients << Client.new(connection: connection)
+      @clients[-1].generate_player
+    end
+
+    def find_client(connection:)
       @clients.select { |client| client.connection == connection }
     end
   end
