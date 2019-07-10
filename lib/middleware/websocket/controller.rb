@@ -8,23 +8,23 @@ module Websocket
       @client_interactor = Interactor::ClientInteractor.new
     end
 
-    def on_open(client)
-      @client_interactor.create_client(incoming_client: client)
+    def on_open(connection)
+      @client_interactor.create_client(incoming_connection: connection)
 
       @client_interactor.update_all_clients
     end
 
-    def on_message(client, data)
+    def on_message(connection, data)
       #update the Client in question
       #update_all_clients
     end
 
-    def on_shutdown(client)
+    def on_shutdown(connection)
       puts 'socket closing from the server'
     end
 
-    def on_close(client)
-      @client_interactor.delete_client(incoming_client: client)
+    def on_close(connection)
+      @client_interactor.delete_client(incoming_connection: connection)
     end
   end
 end

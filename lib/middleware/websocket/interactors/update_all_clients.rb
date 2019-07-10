@@ -5,7 +5,7 @@ module Websocket
     class UpdateAllClients
       def call(clients: clients)
         payload = generate_payload(clients: clients)
-        clients.each { |client| client.connection_client.write(payload) }
+        clients.each { |client| client.connection.write(payload) }
       end
 
       private

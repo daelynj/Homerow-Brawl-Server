@@ -10,12 +10,12 @@ module Websocket
         @clients = []
       end
 
-      def create_client(incoming_client: client)
-        @clients << Client.new(connection_client: incoming_client)
+      def create_client(incoming_connection:)
+        @clients << Client.new(connection: incoming_connection)
       end
 
-      def delete_client(incoming_client: client)
-        @clients -= find_client(incoming_client: incoming_client)
+      def delete_client(incoming_connection:)
+        @clients -= find_client(incoming_connection: incoming_connection)
       end
 
       def update_all_clients
@@ -24,8 +24,8 @@ module Websocket
 
       private
 
-      def find_client(incoming_client: client)
-        @clients.select { |client| client.connection_client == incoming_client }
+      def find_client(incoming_connection:)
+        @clients.select { |client| client.connection == incoming_connection }
       end
     end
   end
