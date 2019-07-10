@@ -1,7 +1,7 @@
 require 'spec_helper'
 
 RSpec.describe Websocket::Controller do
-  let(:client) { double }
+  let(:connection) { double }
   let (:controller) do
     described_class.new
   end
@@ -15,11 +15,11 @@ RSpec.describe Websocket::Controller do
   end
 
   describe '#on_open' do
-    subject { controller.on_open(client) }
+    subject { controller.on_open(connection) }
 
     it 'tells the interactor to generate a Client' do
       expect(controller.client_interactor).to receive(:create_client).with(
-        incoming_client: client
+        incoming_connection: connection
       )
       subject
     end
@@ -31,11 +31,11 @@ RSpec.describe Websocket::Controller do
   end
 
   describe '#on_close' do
-    subject { controller.on_close(client) }
+    subject { controller.on_close(connection) }
 
     it 'tells the interactor to remove the incoming client' do
       expect(controller.client_interactor).to receive(:delete_client).with(
-        incoming_client: client
+        incoming_connection: connection
       )
       subject
     end
