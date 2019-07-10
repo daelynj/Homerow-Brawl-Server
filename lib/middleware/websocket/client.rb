@@ -3,7 +3,7 @@ module Websocket
     attr_reader :connection, :client_attributes
     attr_accessor :position
 
-    def initialize(connection: client)
+    def initialize(connection:)
       @connection = connection
       @position = 0
     end
