@@ -1,17 +1,18 @@
-require './lib/middleware/websocket/interactors/client_interactor'
+require './lib/middleware/websocket/client'
+require './lib/middleware/websocket/interactors/update_all_clients'
 
 module Websocket
   class Controller
-    attr_reader :client_interactor
+    attr_reader :clients
 
     def initialize
-      @client_interactor = Interactor::ClientInteractor.new
+      @clients = []
     end
 
     def on_open(connection)
-      @client_interactor.create_client(incoming_connection: connection)
+      @clients << Client.new(connection: connection)
 
-      @client_interactor.update_all_clients
+      Interactor::UpdateAllClients.new.call(clients: @clients)
     end
 
     def on_message(connection, data)
@@ -24,7 +25,13 @@ module Websocket
     end
 
     def on_close(connection)
-      @client_interactor.delete_client(incoming_connection: connection)
+      @clients -= find_client(connection: connection)
+    end
+
+    private
+
+    def find_client(connection: connection)
+      @clients.select { |client| client.connection == connection }
     end
   end
 end
