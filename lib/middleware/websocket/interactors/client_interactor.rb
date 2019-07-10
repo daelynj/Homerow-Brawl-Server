@@ -18,12 +18,14 @@ module Websocket
         @clients -= find_client(incoming_client: incoming_client)
       end
 
-      def find_client(incoming_client: client)
-        @clients.select { |client| client.connection_client == incoming_client }
+      def update_all_clients
+        UpdateAllClients.new.call(clients: @clients)
       end
 
-      def update_all_clients
-        UpdateAllClients.new(clients: @clients)
+      private
+
+      def find_client(incoming_client: client)
+        @clients.select { |client| client.connection_client == incoming_client }
       end
     end
   end

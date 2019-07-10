@@ -2,8 +2,8 @@ require 'spec_helper'
 
 RSpec.describe Websocket::Interactor::ClientInteractor do
   let(:client_interactor) { described_class.new }
-  let(:client_1) { double }
-  let(:client_2) { double }
+  let(:client_1) { double('client').as_null_object }
+  let(:client_2) { double('client').as_null_object }
 
   describe '#create_client' do
     subject { client_interactor.create_client(incoming_client: client_1) }
@@ -19,9 +19,12 @@ RSpec.describe Websocket::Interactor::ClientInteractor do
   describe '#delete_client' do
     subject { client_interactor.delete_client(incoming_client: client_2) }
 
-    it 'removes the incoming client from the client list' do
+    before do
       client_interactor.create_client(incoming_client: client_1)
       client_interactor.create_client(incoming_client: client_2)
+    end
+
+    it 'removes the incoming client from the client list' do
       subject
 
       clients = client_interactor.clients
@@ -31,22 +34,18 @@ RSpec.describe Websocket::Interactor::ClientInteractor do
     end
   end
 
-  describe '#find_client' do
-    subject { client_interactor.find_client(incoming_client: client_2) }
-
-    it 'returns the incoming client' do
+  describe '#update_all_clients' do
+    before do
       client_interactor.create_client(incoming_client: client_1)
       client_interactor.create_client(incoming_client: client_2)
-
-      expect(subject.first).to eq(client_interactor.clients[1])
     end
-  end
-
-  describe '#update_all_clients' do
     subject { client_interactor.update_all_clients }
 
-    it 'calls the service object for updating all the connected clients' do
-      expect(subject).to be_kind_of(Websocket::Interactor::UpdateAllClients)
+    it 'updates all clients using the write method' do
+      client_interactor
+      expect(client_interactor.clients[0].connection_client).to receive(:write)
+      expect(client_interactor.clients[1].connection_client).to receive(:write)
+      subject
     end
   end
 end
