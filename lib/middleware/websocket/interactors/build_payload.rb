@@ -9,7 +9,7 @@ module Websocket
       end
 
       def client_creation(client:)
-        { 'uuid' => client.uuid, 'id' => client.id }.to_json
+        { 'token' => client.player.token, 'id' => client.player.id }.to_json
       end
     end
   end
