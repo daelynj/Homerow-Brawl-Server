@@ -1,8 +1,8 @@
-require './lib/middleware/websocket/create_player'
+require './lib/typinggame_server/interactors/players/create_player'
 
 module Websocket
   class Client
-    attr_reader :connection, :uuid, :id
+    attr_reader :connection, :player
     attr_accessor :position
 
     def initialize(connection:)
@@ -11,13 +11,11 @@ module Websocket
     end
 
     def generate_player
-      player = CreatePlayer.new.call
-      @uuid = player['uuid']
-      @id = player['id']
+      @player = Interactors::Players::CreatePlayer.new.call.player
     end
 
     def client_attributes
-      client_attributes = { 'id' => @id, 'position' => @position }
+      client_attributes = { 'id' => @player.id, 'position' => @position }
     end
   end
 end

@@ -32,7 +32,7 @@ module Websocket
 
     def generate_client(connection:)
       @clients << Client.new(connection: connection)
-      @clients[-1].generate_player
+      @clients.last.generate_player
     end
 
     def find_client(connection:)

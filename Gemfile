@@ -7,7 +7,6 @@ gem 'rubocop'
 gem 'prettier'
 gem 'pry'
 gem 'iodine'
-gem 'httparty'
 
 gem 'pg'
 
