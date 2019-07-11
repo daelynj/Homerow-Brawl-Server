@@ -12,7 +12,7 @@ RSpec.describe Api::Views::Players::Create, type: :view do
     let(:exposures) { Hash[player: player] }
 
     it 'lists the UUID as json' do
-      expect(rendered).to eq({ "uuid": uuid }.to_json)
+      expect(rendered).to eq({ "id": player.id, "uuid": uuid }.to_json)
     end
   end
 end

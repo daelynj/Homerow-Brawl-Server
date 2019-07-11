@@ -5,7 +5,7 @@ module Api
         include Api::View
 
         def render
-          raw JSON.generate({ uuid: player.token })
+          raw JSON.generate({ id: player.id, uuid: player.token })
         end
       end
     end
