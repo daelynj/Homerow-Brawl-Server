@@ -26,17 +26,24 @@ RSpec.describe Websocket::Controller do
   end
 
   describe '#on_close' do
+    subject { controller.on_close(connection_2) }
+
     before do
       controller.on_open(connection_1)
       controller.on_open(connection_2)
-      controller.on_close(connection_2)
     end
 
     it 'removes the incoming client from the client list' do
+      subject
       clients = controller.clients
 
       expect(clients.length).to eq(1)
       expect(clients.first.connection).to eq(connection_1)
+    end
+
+    it 'updates all clients using the write method' do
+      expect(controller.clients[0].connection).to receive(:write)
+      subject
     end
   end
 end
