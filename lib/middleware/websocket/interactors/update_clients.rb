@@ -1,4 +1,5 @@
-require './lib/middleware/websocket/interactors/build_payload'
+require './lib/middleware/websocket/interactors/race_payload'
+require './lib/middleware/websocket/interactors/client_creation_payload'
 
 module Websocket
   module Interactor
@@ -16,11 +17,11 @@ module Websocket
       private
 
       def generate_client_creation_payload(client:)
-        BuildPayload.new.client_creation(client: client)
+        ClientCreationPayload.new.call(client: client)
       end
 
       def generate_race_payload(clients:)
-        BuildPayload.new.race(clients: clients)
+        RacePayload.new.call(clients: clients)
       end
     end
   end
