@@ -1,5 +1,6 @@
 require './lib/middleware/websocket/client'
-require './lib/middleware/websocket/interactors/update_all_clients'
+require './lib/middleware/websocket/interactors/update_clients'
+require 'json'
 
 module Websocket
   class Controller
@@ -11,13 +12,17 @@ module Websocket
 
     def on_open(connection)
       generate_client(connection: connection)
-
-      Interactor::UpdateAllClients.new.call(clients: @clients)
+      update_clients.race_update(clients: @clients)
     end
 
     def on_message(connection, data)
-      #update the Client in question
-      #update_all_clients
+      data = JSON.parse(data)
+      client = find_client(connection: connection).first
+
+      if (connection == client.connection)
+        client.position = data['position']
+        update_clients.race_update(clients: @clients)
+      end
     end
 
     def on_shutdown(connection)
@@ -33,10 +38,16 @@ module Websocket
     def generate_client(connection:)
       @clients << Client.new(connection: connection)
       @clients.last.generate_player
+
+      update_clients.client_creation(client: @clients.last)
     end
 
     def find_client(connection:)
       @clients.select { |client| client.connection == connection }
+    end
+
+    def update_clients
+      @update_clients ||= Interactor::UpdateClients.new
     end
   end
 end

@@ -25,6 +25,23 @@ RSpec.describe Websocket::Controller do
     end
   end
 
+  describe '#on_message' do
+    let(:data) { '{"position":33.33333333333333}' }
+    subject { controller.on_message(connection_1, data) }
+
+    before { controller.on_open(connection_1) }
+
+    it 'updates the client position' do
+      subject
+      expect(controller.clients.first.position).to eq(33.33333333333333)
+    end
+
+    it 'updates all clients with the status of the race' do
+      expect(controller.clients.first.connection).to receive(:write)
+      subject
+    end
+  end
+
   describe '#on_close' do
     before do
       controller.on_open(connection_1)

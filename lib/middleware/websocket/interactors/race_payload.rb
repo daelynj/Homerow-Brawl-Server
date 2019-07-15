@@ -1,7 +1,7 @@
 module Websocket
   module Interactor
-    class BuildPayload
-      def call(clients: clients)
+    class RacePayload
+      def call(clients:)
         players = []
         clients.each { |client| players << client.client_attributes }
 
