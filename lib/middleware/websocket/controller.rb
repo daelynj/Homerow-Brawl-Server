@@ -17,7 +17,7 @@ module Websocket
 
     def on_message(connection, data)
       data = JSON.parse(data)
-      client = find_client(connection: connection).first
+      client = find_client(connection: connection)
 
       if (connection == client.connection)
         client.position = data['position']
@@ -34,7 +34,7 @@ module Websocket
       client.delete_player
       @clients -= [client]
 
-      Interactor::UpdateAllClients.new.call(clients: @clients)
+      Interactor::UpdateClients.new.race_update(clients: @clients)
     end
 
     private
