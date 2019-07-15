@@ -30,7 +30,11 @@ module Websocket
     end
 
     def on_close(connection)
-      @clients -= find_client(connection: connection)
+      client = find_client(connection: connection)
+      client.delete_player
+      @clients -= [client]
+
+      Interactor::UpdateAllClients.new.call(clients: @clients)
     end
 
     private
@@ -43,7 +47,7 @@ module Websocket
     end
 
     def find_client(connection:)
-      @clients.select { |client| client.connection == connection }
+      @clients.select { |client| client.connection == connection }.first
     end
 
     def update_clients

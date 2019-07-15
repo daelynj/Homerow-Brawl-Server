@@ -1,4 +1,5 @@
 require './lib/typinggame_server/interactors/players/create_player'
+require './lib/typinggame_server/interactors/players/destroy_player'
 
 module Websocket
   class Client
@@ -12,6 +13,10 @@ module Websocket
 
     def generate_player
       @player = Interactors::Players::CreatePlayer.new.call.player
+    end
+
+    def delete_player
+      Interactors::Players::DestroyPlayer.new.call(@player.token)
     end
 
     def client_attributes
