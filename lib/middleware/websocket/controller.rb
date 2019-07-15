@@ -16,13 +16,11 @@ module Websocket
     end
 
     def on_message(connection, data)
-      data = JSON.parse(data)
       client = find_client(connection: connection)
 
-      if (connection == client.connection)
-        client.position = data['position']
-        update_clients.race_update(clients: @clients)
-      end
+      Interactor::HandleMessage.new.call(
+        data: JSON.parse(data), client: client, clients: @clients
+      )
     end
 
     def on_shutdown(connection)
