@@ -1,5 +1,6 @@
 require './lib/middleware/websocket/client'
-require './lib/middleware/websocket/interactors/update_clients'
+require './lib/middleware/websocket/interactors/updates/race_update'
+require './lib/middleware/websocket/interactors/updates/client_creation_update'
 require 'json'
 
 module Websocket
@@ -12,7 +13,7 @@ module Websocket
 
     def on_open(connection)
       generate_client(connection: connection)
-      update_clients.race_update(clients: @clients)
+      race_update.call(clients: @clients)
     end
 
     def on_message(connection, data)
@@ -21,7 +22,7 @@ module Websocket
 
       if (connection == client.connection)
         client.position = data['position']
-        update_clients.race_update(clients: @clients)
+        race_update.call(clients: @clients)
       end
     end
 
@@ -34,7 +35,7 @@ module Websocket
       client.delete_player
       @clients -= [client]
 
-      Interactor::UpdateClients.new.race_update(clients: @clients)
+      race_update.call(clients: @clients)
     end
 
     private
@@ -43,15 +44,15 @@ module Websocket
       @clients << Client.new(connection: connection)
       @clients.last.generate_player
 
-      update_clients.client_creation(client: @clients.last)
+      Interactor::ClientCreationUpdate.new.call(client: @clients.last)
     end
 
     def find_client(connection:)
       @clients.select { |client| client.connection == connection }.first
     end
 
-    def update_clients
-      @update_clients ||= Interactor::UpdateClients.new
+    def race_update
+      @race_update ||= Interactor::RaceUpdate.new
     end
   end
 end
