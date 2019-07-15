@@ -19,7 +19,7 @@ module Websocket
       data = JSON.parse(data)
       client = find_client(connection: connection).first
 
-      if (data['token'] == client.player.token)
+      if (connection == client.connection)
         client.position = data['position']
         Interactor::UpdateClients.new.race_update(clients: @clients)
       end

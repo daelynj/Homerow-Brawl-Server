@@ -26,32 +26,19 @@ RSpec.describe Websocket::Controller do
   end
 
   describe '#on_message' do
+    let(:data) { '{"position":33.33333333333333}' }
     subject { controller.on_message(connection_1, data) }
+
     before { controller.on_open(connection_1) }
 
-    context 'received a race update with an improper token' do
-      let(:token) { 'incorrect_token' }
-      let(:data) { "{\"token\":\"#{token}\",\"position\":33.33333333333333}" }
-
-      it 'does not update the client position' do
-        subject
-        expect(controller.clients.first.position).to eq(0)
-      end
+    it 'updates the client position' do
+      subject
+      expect(controller.clients.first.position).to eq(33.33333333333333)
     end
 
-    context 'received a race update with a proper token' do
-      let(:token) { controller.clients.first.player.token }
-      let(:data) { "{\"token\":\"#{token}\",\"position\":33.33333333333333}" }
-
-      it 'updates the client position' do
-        subject
-        expect(controller.clients.first.position).to eq(33.33333333333333)
-      end
-
-      it 'updates all clients with the status of the race' do
-        expect(controller.clients.first.connection).to receive(:write)
-        subject
-      end
+    it 'updates all clients with the status of the race' do
+      expect(controller.clients.first.connection).to receive(:write)
+      subject
     end
   end
 
