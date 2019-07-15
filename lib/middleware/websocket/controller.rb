@@ -12,7 +12,7 @@ module Websocket
 
     def on_open(connection)
       generate_client(connection: connection)
-      Interactor::UpdateClients.new.race_update(clients: @clients)
+      update_clients.race_update(clients: @clients)
     end
 
     def on_message(connection, data)
@@ -21,7 +21,7 @@ module Websocket
 
       if (connection == client.connection)
         client.position = data['position']
-        Interactor::UpdateClients.new.race_update(clients: @clients)
+        update_clients.race_update(clients: @clients)
       end
     end
 
@@ -39,11 +39,15 @@ module Websocket
       @clients << Client.new(connection: connection)
       @clients.last.generate_player
 
-      Interactor::UpdateClients.new.client_creation(client: @clients.last)
+      update_clients.client_creation(client: @clients.last)
     end
 
     def find_client(connection:)
       @clients.select { |client| client.connection == connection }
+    end
+
+    def update_clients
+      @update_clients ||= Interactor::UpdateClients.new
     end
   end
 end
