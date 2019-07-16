@@ -3,12 +3,13 @@ require './lib/typinggame_server/interactors/players/destroy_player'
 
 module Websocket
   class Client
-    attr_reader :connection, :player
+    attr_reader :connection, :player, :room
     attr_accessor :position
 
     def initialize(connection:)
       @connection = connection
       @position = 0
+      @room = connection.env['PATH_INFO'][1..]
     end
 
     def generate_player

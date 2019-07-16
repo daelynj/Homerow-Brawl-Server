@@ -5,10 +5,11 @@ require 'json'
 
 module Websocket
   class Controller
-    attr_reader :clients
+    attr_reader :clients, :rooms
 
     def initialize
       @clients = []
+      @rooms = []
     end
 
     def on_open(connection)
@@ -40,6 +41,7 @@ module Websocket
 
     def generate_client(connection:)
       @clients << Client.new(connection: connection)
+      @rooms << connection.env['PATH_INFO'][1..]
       @clients.last.generate_player
 
       Interactor::ClientCreationUpdate.new.call(client: @clients.last)
