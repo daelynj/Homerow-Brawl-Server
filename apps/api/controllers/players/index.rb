@@ -7,11 +7,11 @@ module Api
         expose :players
 
         def initialize(interactor: Interactors::Players::FetchAllPlayers.new)
-          @interactor = interactor
+          @fetch_all_players = interactor
         end
 
         def call(_params)
-          @players = @interactor.call.players
+          @players = @fetch_all_players.call.players
         end
       end
     end

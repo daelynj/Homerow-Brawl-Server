@@ -2,10 +2,10 @@ require 'spec_helper'
 
 RSpec.describe Api::Controllers::Players::Index, type: :action do
   let(:repository) { PlayerRepository.new }
-  let(:interactor) do
+  let(:fetch_all_players) do
     Interactors::Players::FetchAllPlayers.new(repository: repository)
   end
-  let(:action) { described_class.new(interactor: interactor) }
+  let(:action) { described_class.new(interactor: fetch_all_players) }
   let(:params) { Hash[] }
 
   before do

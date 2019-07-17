@@ -1,9 +1,9 @@
 RSpec.describe Api::Controllers::Players::Create, type: :action do
   let(:repository) { PlayerRepository.new }
-  let(:interactor) do
+  let(:create_player) do
     Interactors::Players::CreatePlayer.new(repository: repository)
   end
-  let(:action) { described_class.new(interactor: interactor) }
+  let(:action) { described_class.new(interactor: create_player) }
   let(:params) { Hash[] }
 
   it 'is successful' do

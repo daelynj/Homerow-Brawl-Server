@@ -2,10 +2,10 @@ require 'spec_helper'
 
 RSpec.describe Api::Controllers::Players::Show, type: :action do
   let(:repository) { PlayerRepository.new }
-  let(:interactor) do
+  let(:fetch_player) do
     Interactors::Players::FetchPlayer.new(repository: repository)
   end
-  let(:action) { described_class.new(interactor: interactor) }
+  let(:action) { described_class.new(interactor: fetch_player) }
 
   context "the player doesn't exist" do
     it 'is unsuccessful' do

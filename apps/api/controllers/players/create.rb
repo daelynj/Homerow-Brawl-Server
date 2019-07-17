@@ -7,11 +7,11 @@ module Api
         expose :player
 
         def initialize(interactor: Interactors::Players::CreatePlayer.new)
-          @interactor = interactor
+          @create_player = interactor
         end
 
         def call(_params)
-          @player = @interactor.call.player
+          @player = @create_player.call.player
         end
       end
     end

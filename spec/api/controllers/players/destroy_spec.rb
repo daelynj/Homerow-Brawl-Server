@@ -3,10 +3,10 @@ require 'securerandom'
 
 RSpec.describe Api::Controllers::Players::Destroy, type: :action do
   let(:repository) { PlayerRepository.new }
-  let(:interactor) do
+  let(:destroy_player) do
     Interactors::Players::DestroyPlayer.new(repository: repository)
   end
-  let(:action) { described_class.new(interactor: interactor) }
+  let(:action) { described_class.new(interactor: destroy_player) }
   let(:uuid) { SecureRandom.uuid }
 
   context 'nil input' do
