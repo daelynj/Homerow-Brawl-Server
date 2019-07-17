@@ -3,13 +3,13 @@ require 'securerandom'
 
 describe Interactors::Players::DestroyPlayer do
   let(:repository) { PlayerRepository.new }
-  let(:interactor) { described_class.new(repository: repository) }
+  let(:destroy_player) { described_class.new(repository: repository) }
   let(:uuid) { SecureRandom.uuid }
 
   before { repository.create(id: '1', token: uuid) }
 
   context 'nil input' do
-    let(:result) { interactor.call(nil) }
+    let(:result) { destroy_player.call(nil) }
 
     it 'is unsuccessful' do
       expect(result.player).to be(nil)
@@ -17,7 +17,7 @@ describe Interactors::Players::DestroyPlayer do
   end
 
   context 'bad input' do
-    let(:result) { interactor.call('2bbca412-65cc-4e35-a5b3-6a0a0fd') }
+    let(:result) { destroy_player.call('2bbca412-65cc-4e35-a5b3-6a0a0fd') }
 
     it 'is unsuccessful' do
       expect(result.player).to be(nil)
@@ -26,7 +26,7 @@ describe Interactors::Players::DestroyPlayer do
 
   context 'good input' do
     it 'deletes the player by ID' do
-      interactor.call(uuid)
+      destroy_player.call(uuid)
       expect(repository.find_by_token(token: uuid)).to be(nil)
     end
   end
