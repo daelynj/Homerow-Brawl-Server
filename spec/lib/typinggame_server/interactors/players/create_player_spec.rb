@@ -2,8 +2,8 @@ require 'spec_helper'
 
 describe Interactors::Players::CreatePlayer do
   let(:repository) { PlayerRepository.new }
-  let(:interactor) { described_class.new(repository: repository) }
-  let(:result) { interactor.call }
+  let(:create_player) { described_class.new(repository: repository) }
+  let(:result) { create_player.call }
 
   it 'succeeds' do
     expect(result.successful?).to be(true)
