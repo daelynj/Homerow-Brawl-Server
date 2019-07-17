@@ -3,7 +3,8 @@ require './lib/middleware/websocket/interactors/payloads/race_payload'
 module Websocket
   module Interactor
     class RaceUpdate
-      def call(clients:)
+      def call(room:)
+        clients = room.clients
         payload = generate_race_payload(clients: clients)
         clients.each { |client| client.connection.write(payload) }
       end
