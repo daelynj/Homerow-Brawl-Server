@@ -2,7 +2,7 @@ require 'spec_helper'
 
 describe Interactors::Rooms::FetchRoom do
   let(:repository) { RoomRepository.new }
-  let(:interactor) { described_class.new(repository: repository) }
+  let(:fetch_room) { described_class.new(repository: repository) }
   let(:params) { 1 }
 
   before do
@@ -11,7 +11,7 @@ describe Interactors::Rooms::FetchRoom do
   end
 
   context 'When the room exists' do
-    let(:result) { interactor.call(params) }
+    let(:result) { fetch_room.call(params) }
 
     it 'succeeds' do
       expect(result.successful?).to be(true)

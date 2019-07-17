@@ -2,8 +2,8 @@ require 'spec_helper'
 
 RSpec.describe Api::Controllers::Rooms::Show, type: :action do
   let(:repository) { RoomRepository.new }
-  let(:interactor) { Interactors::Rooms::FetchRoom.new(repository: repository) }
-  let(:action) { described_class.new(interactor: interactor) }
+  let(:fetch_room) { Interactors::Rooms::FetchRoom.new(repository: repository) }
+  let(:action) { described_class.new(interactor: fetch_room) }
 
   context "the room doesn't exist" do
     it 'is unsuccessful' do

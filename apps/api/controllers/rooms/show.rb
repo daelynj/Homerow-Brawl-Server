@@ -7,11 +7,11 @@ module Api
         expose :room
 
         def initialize(interactor: Interactors::Rooms::FetchRoom.new)
-          @interactor = interactor
+          @fetch_room = interactor
         end
 
         def call(params)
-          room = @interactor.call(params[:id]).room
+          room = @fetch_room.call(params[:id]).room
           halt 404 if room.nil?
           @room = room
         end
