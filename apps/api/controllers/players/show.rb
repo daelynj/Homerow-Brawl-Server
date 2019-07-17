@@ -7,11 +7,11 @@ module Api
         expose :player
 
         def initialize(interactor: Interactors::Players::FetchPlayer.new)
-          @interactor = interactor
+          @fetch_player = interactor
         end
 
         def call(params)
-          player = @interactor.call(params[:id]).player
+          player = @fetch_player.call(params[:id]).player
           halt 404 if player.nil?
           @player = player
         end

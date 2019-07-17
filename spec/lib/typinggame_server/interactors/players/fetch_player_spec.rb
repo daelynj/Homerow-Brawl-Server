@@ -2,7 +2,7 @@ require 'spec_helper'
 
 describe Interactors::Players::FetchPlayer do
   let(:repository) { PlayerRepository.new }
-  let(:interactor) { described_class.new(repository: repository) }
+  let(:fetch_player) { described_class.new(repository: repository) }
   let(:params) { 1 }
 
   before do
@@ -11,7 +11,7 @@ describe Interactors::Players::FetchPlayer do
   end
 
   context 'When the player exists' do
-    let(:result) { interactor.call(params) }
+    let(:result) { fetch_player.call(params) }
 
     it 'succeeds' do
       expect(result.successful?).to be(true)
