@@ -2,10 +2,10 @@ require 'spec_helper'
 
 RSpec.describe Api::Controllers::Rooms::Destroy, type: :action do
   let(:repository) { RoomRepository.new }
-  let(:interactor) do
+  let(:destroy_room) do
     Interactors::Rooms::DestroyRoom.new(repository: repository)
   end
-  let(:action) { described_class.new(interactor: interactor) }
+  let(:action) { described_class.new(interactor: destroy_room) }
 
   context 'nil input' do
     let(:params) { Hash[id: nil] }

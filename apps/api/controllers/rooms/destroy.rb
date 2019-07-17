@@ -5,11 +5,11 @@ module Api
         include Api::Action
 
         def initialize(interactor: Interactors::Rooms::DestroyRoom.new)
-          @interactor = interactor
+          @destroy_room = interactor
         end
 
         def call(params)
-          room = @interactor.call(params[:id]).room
+          room = @destroy_room.call(params[:id]).room
 
           halt 400 && self.status = 400 if room.nil?
         end
