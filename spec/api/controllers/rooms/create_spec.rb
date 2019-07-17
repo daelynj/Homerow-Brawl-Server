@@ -1,9 +1,9 @@
 RSpec.describe Api::Controllers::Rooms::Create, type: :action do
   let(:repository) { RoomRepository.new }
-  let(:interactor) do
+  let(:create_room) do
     Interactors::Rooms::CreateRoom.new(repository: repository)
   end
-  let(:action) { described_class.new(interactor: interactor) }
+  let(:action) { described_class.new(interactor: create_room) }
   let(:params) { Hash[] }
 
   it 'is successful' do

@@ -7,11 +7,11 @@ module Api
         expose :room
 
         def initialize(interactor: Interactors::Rooms::CreateRoom.new)
-          @interactor = interactor
+          @create_room = interactor
         end
 
         def call(_params)
-          @room = @interactor.call.room
+          @room = @create_room.call.room
         end
       end
     end

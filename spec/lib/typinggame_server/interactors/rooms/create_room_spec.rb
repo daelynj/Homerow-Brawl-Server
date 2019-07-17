@@ -2,8 +2,8 @@ require 'spec_helper'
 
 describe Interactors::Rooms::CreateRoom do
   let(:repository) { RoomRepository.new }
-  let(:interactor) { described_class.new(repository: repository) }
-  let(:result) { interactor.call }
+  let(:create_room) { described_class.new(repository: repository) }
+  let(:result) { create_room.call }
 
   it 'succeeds' do
     expect(result.successful?).to be(true)
