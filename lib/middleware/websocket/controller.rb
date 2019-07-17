@@ -15,15 +15,17 @@ module Websocket
     end
 
     def on_open(connection)
-      generate_client(connection: connection)
-      race_update.call(clients: @clients)
+      client = generate_client(connection: connection)
+
+      race_update.call(room: find_room(id: client.room_id))
     end
 
     def on_message(connection, data)
       client = find_client(connection: connection)
+      room = find_room(id: client.room_id)
 
       Interactor::HandleMessage.new.call(
-        data: JSON.parse(data), client: client, clients: @clients
+        data: JSON.parse(data), room: room, client: client
       )
     end
 
@@ -36,18 +38,34 @@ module Websocket
       client.delete_player
       @clients -= [client]
 
-      race_update.call(clients: @clients)
+      race_update.call(room: find_room(id: client.room_id))
     end
 
     private
 
     def generate_client(connection:)
       client = Client.new(connection: connection)
-      setup_room(client: client)
       client.generate_player
       @clients << client
+      setup_room(client: client)
 
       Interactor::ClientCreationUpdate.new.call(client: @clients.last)
+
+      return client
+    end
+
+    def setup_room(client:)
+      connection_path = client.connection.env['PATH_INFO'][1..].to_i
+      room = find_room(id: connection_path)
+
+      if room.nil?
+        room = Room.new(id: connection_path)
+        @rooms << room
+      end
+
+      room.add_client(client: client)
+
+      return room
     end
 
     def find_client(connection:)
@@ -58,20 +76,8 @@ module Websocket
       @race_update ||= Interactor::RaceUpdate.new
     end
 
-    def setup_room(client:)
-      connection_path = client.connection.env['PATH_INFO'][1..].to_i
-
-      room = @rooms.detect { |room| room.id == connection_path }
-
-      if room.nil?
-        new_room = Room.new(id: connection_path)
-        @rooms << new_room
-        new_room.add_client(client: client)
-        client.room_id = new_room.id
-      else
-        room.add_client(client: client)
-        client.room_id = room.id
-      end
+    def find_room(id:)
+      @rooms.detect { |room| room.id == id }
     end
   end
 end
