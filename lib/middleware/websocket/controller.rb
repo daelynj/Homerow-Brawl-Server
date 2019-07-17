@@ -1,14 +1,17 @@
 require './lib/middleware/websocket/client'
 require './lib/middleware/websocket/interactors/updates/race_update'
 require './lib/middleware/websocket/interactors/updates/client_creation_update'
+require './lib/middleware/websocket/room'
 require 'json'
 
 module Websocket
   class Controller
     attr_reader :clients
+    attr_accessor :rooms
 
     def initialize
       @clients = []
+      @rooms = []
     end
 
     def on_open(connection)
@@ -39,18 +42,36 @@ module Websocket
     private
 
     def generate_client(connection:)
-      @clients << Client.new(connection: connection)
-      @clients.last.generate_player
+      client = Client.new(connection: connection)
+      setup_room(client: client)
+      client.generate_player
+      @clients << client
 
       Interactor::ClientCreationUpdate.new.call(client: @clients.last)
     end
 
     def find_client(connection:)
-      @clients.select { |client| client.connection == connection }.first
+      @clients.detect { |client| client.connection == connection }
     end
 
     def race_update
       @race_update ||= Interactor::RaceUpdate.new
+    end
+
+    def setup_room(client:)
+      connection_path = client.connection.env['PATH_INFO'][1..].to_i
+
+      room = @rooms.detect { |room| room.id == connection_path }
+
+      if room.nil?
+        new_room = Room.new(id: connection_path)
+        @rooms << new_room
+        new_room.add_client(client: client)
+        client.room_id = new_room.id
+      else
+        room.add_client(client: client)
+        client.room_id = room.id
+      end
     end
   end
 end

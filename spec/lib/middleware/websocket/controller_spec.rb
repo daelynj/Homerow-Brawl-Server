@@ -1,8 +1,10 @@
 require 'spec_helper'
 
 RSpec.describe Websocket::Controller do
-  let(:connection_1) { double('connection').as_null_object }
-  let(:connection_2) { double('connection').as_null_object }
+  let(:env_1) { { 'PATH_INFO' => '/1' } }
+  let(:env_2) { { 'PATH_INFO' => '/2' } }
+  let(:connection_1) { double('connection', env: env_1).as_null_object }
+  let(:connection_2) { double('connection', env: env_2).as_null_object }
   let(:controller) { described_class.new }
 
   describe '#on_open' do
@@ -10,7 +12,6 @@ RSpec.describe Websocket::Controller do
       controller.on_open(connection_1)
       controller.on_open(connection_2)
     end
-
     it 'appends a Client to the client list' do
       expect(controller.clients[0].connection).to eq(connection_1)
       expect(controller.clients[1].connection).to eq(connection_2)
@@ -22,6 +23,39 @@ RSpec.describe Websocket::Controller do
 
       controller.on_open(connection_1)
       controller.on_open(connection_2)
+    end
+  end
+
+  describe '#on_open room generation' do
+    context "the rooms being joined don't exist" do
+      before do
+        controller.on_open(connection_1)
+        controller.on_open(connection_2)
+      end
+
+      it 'generates new rooms' do
+        expect(controller.rooms.length).to eq(2)
+      end
+    end
+
+    context 'the rooms being joined exist' do
+      let(:room_1) { Websocket::Room.new(id: 1) }
+      let(:room_2) { Websocket::Room.new(id: 2) }
+
+      before do
+        controller.rooms << room_1
+        controller.rooms << room_2
+        controller.on_open(connection_1)
+        controller.on_open(connection_2)
+      end
+
+      it 'adds the clients to the room' do
+        expect(controller.clients[0].room_id).to eq(1)
+        expect(controller.rooms[0].id).to eq(1)
+
+        expect(controller.clients[1].room_id).to eq(2)
+        expect(controller.rooms[1].id).to eq(2)
+      end
     end
   end
 
