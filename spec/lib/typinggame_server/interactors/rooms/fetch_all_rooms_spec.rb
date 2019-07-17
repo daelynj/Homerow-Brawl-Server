@@ -2,7 +2,7 @@ require 'spec_helper'
 
 describe Interactors::Rooms::FetchAllRooms do
   let(:repository) { RoomRepository.new }
-  let(:interactor) { described_class.new(repository: repository) }
+  let(:fetch_all_rooms) { described_class.new(repository: repository) }
 
   before do
     repository.create(id: '1')
@@ -10,7 +10,7 @@ describe Interactors::Rooms::FetchAllRooms do
   end
 
   context 'good input' do
-    let(:result) { interactor.call }
+    let(:result) { fetch_all_rooms.call }
 
     it 'succeeds' do
       expect(result.successful?).to be(true)

@@ -7,11 +7,11 @@ module Api
         expose :rooms
 
         def initialize(interactor: Interactors::Rooms::FetchAllRooms.new)
-          @interactor = interactor
+          @fetch_all_rooms = interactor
         end
 
         def call(_params)
-          @rooms = @interactor.call.rooms
+          @rooms = @fetch_all_rooms.call.rooms
         end
       end
     end
