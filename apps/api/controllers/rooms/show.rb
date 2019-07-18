@@ -11,6 +11,9 @@ module Api
         end
 
         def call(params)
+          headers['Access-Control-Allow-Origin'] = '*'
+          headers['Access-Control-Request-Method'] = '*'
+
           room = @fetch_room.call(params[:id]).room
           halt 404 if room.nil?
           @room = room
