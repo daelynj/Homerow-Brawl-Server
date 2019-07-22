@@ -7,6 +7,8 @@ Hanami::Model.migration do
       column :token,
              'uuid',
              default: Hanami::Model::Sql.function(:uuid_generate_v4)
+      column :room, Integer
+      column :position, Integer
     end
   end
 
