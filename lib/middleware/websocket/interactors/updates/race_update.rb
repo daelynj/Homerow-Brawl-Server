@@ -3,16 +3,9 @@ require './lib/middleware/websocket/interactors/payloads/race_payload'
 module Websocket
   module Interactor
     class RaceUpdate
-      def call(room:)
-        clients = room.clients
-        payload = generate_race_payload(clients: clients)
-        clients.each { |client| client.connection.write(payload) }
-      end
-
-      private
-
-      def generate_race_payload(clients:)
-        RacePayload.new.call(clients: clients)
+      def call(connection:, room_id:)
+        connection.publish "#{room_id}",
+                           "#{RacePayload.new.call(room_id: room_id)}"
       end
     end
   end
