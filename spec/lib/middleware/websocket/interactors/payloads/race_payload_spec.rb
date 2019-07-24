@@ -1,25 +1,23 @@
 require 'spec_helper'
 
 RSpec.describe Websocket::Interactor::RacePayload do
-  let(:client_1) do
-    Websocket::Client.new(connection: double('connection').as_null_object)
-  end
-  let(:client_2) do
-    Websocket::Client.new(connection: double('connection').as_null_object)
-  end
-  let(:clients) { [client_1, client_2] }
+  let(:player_1) { Interactors::Players::CreatePlayer.new.call.player }
+  let(:player_2) { Interactors::Players::CreatePlayer.new.call.player }
+  let(:room) { Interactors::Rooms::CreateRoom.new.call.room }
+  let(:create_player_room) { Interactors::PlayersRooms::CreatePlayersRooms.new }
+  let(:result) { described_class.new.call(room_id: room.id) }
 
   describe '#call' do
-    subject { described_class.new.call(clients: clients) }
-
     before do
-      allow(client_2.player).to receive(:id)
-      allow(client_1.player).to receive(:id)
+      create_player_room.call(player_id: player_1.id, room_id: room.id)
+      create_player_room.call(player_id: player_2.id, room_id: room.id)
     end
 
-    it 'builds a json payload' do
-      expect(subject).to eq(
-        '{"players":[{"id":null,"position":0},{"id":null,"position":0}]}'
+    it 'builds a payload of all players IDs and positions in the given room' do
+      expect(result).to eq(
+        "{\"players\":[{\"id\":#{player_1.id},\"position\":0},{\"id\":#{
+          player_2.id
+        },\"position\":0}]}"
       )
     end
   end
