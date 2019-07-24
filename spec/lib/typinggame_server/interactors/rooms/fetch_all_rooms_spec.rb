@@ -1,6 +1,6 @@
 require 'spec_helper'
 
-describe Interactors::Rooms::FetchAllRooms do
+RSpec.describe Interactors::Rooms::FetchAllRooms do
   let(:repository) { RoomRepository.new }
   let(:fetch_all_rooms) { described_class.new(repository: repository) }
 

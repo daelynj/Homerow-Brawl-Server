@@ -1,7 +1,7 @@
 require 'spec_helper'
 require 'securerandom'
 
-describe Interactors::Players::DestroyPlayer do
+RSpec.describe Interactors::Players::DestroyPlayer do
   let(:repository) { PlayerRepository.new }
   let(:destroy_player) { described_class.new(repository: repository) }
   let(:uuid) { SecureRandom.uuid }

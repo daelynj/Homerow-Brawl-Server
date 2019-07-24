@@ -1,6 +1,6 @@
 require 'spec_helper'
 
-describe Interactors::Players::CreatePlayer do
+RSpec.describe Interactors::Players::CreatePlayer do
   let(:repository) { PlayerRepository.new }
   let(:create_player) { described_class.new(repository: repository) }
   let(:result) { create_player.call }

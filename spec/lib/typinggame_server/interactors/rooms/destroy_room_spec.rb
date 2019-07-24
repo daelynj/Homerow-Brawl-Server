@@ -1,6 +1,6 @@
 require 'spec_helper'
 
-describe Interactors::Rooms::DestroyRoom do
+RSpec.describe Interactors::Rooms::DestroyRoom do
   let(:repository) { RoomRepository.new }
   let(:destroy_room) { described_class.new(repository: repository) }
 
