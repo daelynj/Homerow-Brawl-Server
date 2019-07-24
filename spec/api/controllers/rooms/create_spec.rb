@@ -1,3 +1,5 @@
+require 'spec_helper'
+
 RSpec.describe Api::Controllers::Rooms::Create, type: :action do
   let(:repository) { RoomRepository.new }
   let(:create_room) do

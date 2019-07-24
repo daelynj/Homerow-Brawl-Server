@@ -1,3 +1,5 @@
+require 'spec_helper'
+
 RSpec.describe PlayerRepository, type: :repository do
   let(:repository) { PlayerRepository.new }
   let(:uuid) { SecureRandom.uuid }

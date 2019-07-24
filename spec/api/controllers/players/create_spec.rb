@@ -1,3 +1,5 @@
+require 'spec_helper'
+
 RSpec.describe Api::Controllers::Players::Create, type: :action do
   let(:repository) { PlayerRepository.new }
   let(:create_player) do
