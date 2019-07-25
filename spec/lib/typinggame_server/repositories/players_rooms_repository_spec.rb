@@ -3,17 +3,15 @@ RSpec.describe PlayersRoomsRepository, type: :repository do
   let(:player_2) { Interactors::Players::CreatePlayer.new.call.player }
   let(:room) { Interactors::Rooms::CreateRoom.new.call.room }
   let(:repository) { PlayersRoomsRepository.new }
-  let(:create_players_rooms) do
-    Interactors::PlayersRooms::CreatePlayersRooms.new
-  end
+  let(:create_player_room) { Interactors::PlayersRooms::CreatePlayerRoom.new }
 
   describe '#find_players_rooms_records' do
     context 'retrieving players_rooms_records with a room_id' do
-      subject { repository.find_players_rooms_records(room_id: room.id) }
+      subject { repository.find_player_room_records(room_id: room.id) }
 
       before do
-        create_players_rooms.call(player_id: player_1.id, room_id: room.id)
-        create_players_rooms.call(player_id: player_2.id, room_id: room.id)
+        create_player_room.call(player_id: player_1.id, room_id: room.id)
+        create_player_room.call(player_id: player_2.id, room_id: room.id)
       end
 
       it 'returns an array of all players_rooms rows with given room_id' do
@@ -27,13 +25,13 @@ RSpec.describe PlayersRoomsRepository, type: :repository do
 
     context 'retrieving a players_rooms_record with a player_id and room_id' do
       subject do
-        repository.find_players_rooms_records(
+        repository.find_player_room_records(
           player_id: player_1.id, room_id: room.id
         )
       end
 
       before do
-        create_players_rooms.call(player_id: player_1.id, room_id: room.id)
+        create_player_room.call(player_id: player_1.id, room_id: room.id)
       end
 
       it 'returns one players_rooms row with given room_id and player_id' do

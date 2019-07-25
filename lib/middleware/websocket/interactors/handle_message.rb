@@ -1,6 +1,6 @@
 require './lib/middleware/websocket/interactors/updates/race_update'
 require './lib/middleware/websocket/interactors/updates/timer_update'
-require './lib/typinggame_server/interactors/players_rooms/update_players_rooms'
+require './lib/typinggame_server/interactors/players_rooms/update_player_room'
 
 module Websocket
   module Interactor
@@ -19,7 +19,7 @@ module Websocket
       private
 
       def update_player_position(data:, room_id:)
-        Interactors::PlayersRooms::UpdatePlayersRooms.new.call(
+        Interactors::PlayersRooms::UpdatePlayerRoom.new.call(
           data: data, room_id: room_id
         )
       end

@@ -5,8 +5,8 @@ RSpec.describe Websocket::Controller do
   let(:room) { Interactors::Rooms::CreateRoom.new.call.room }
   let(:env) { { 'PATH_INFO' => "/#{room.id}" } }
   let(:connection) { double('connection', env: env) }
-  let(:create_players_rooms) do
-    Interactors::PlayersRooms::CreatePlayersRooms.new
+  let(:create_player_room_record) do
+    Interactors::PlayersRooms::CreatePlayerRoom.new
   end
 
   describe '#on_open' do
@@ -22,7 +22,9 @@ RSpec.describe Websocket::Controller do
   end
 
   describe '#on_message' do
-    before { create_players_rooms.call(player_id: player.id, room_id: room.id) }
+    before do
+      create_player_room_record.call(player_id: player.id, room_id: room.id)
+    end
 
     context 'race update' do
       let(:data) { { 'id' => player.id, 'position' => 30 }.to_json }

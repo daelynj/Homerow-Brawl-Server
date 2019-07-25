@@ -2,7 +2,7 @@ require './lib/middleware/websocket/interactors/updates/player_creation_update'
 require './lib/middleware/websocket/interactors/updates/race_update'
 require './lib/typinggame_server/interactors/players/create_player'
 require './lib/typinggame_server/interactors/rooms/fetch_room'
-require './lib/typinggame_server/interactors/players_rooms/create_players_rooms'
+require './lib/typinggame_server/interactors/players_rooms/create_player_room'
 
 module Websocket
   module Interactor
@@ -30,7 +30,7 @@ module Websocket
       end
 
       def build_association(player_id:, room_id:)
-        Interactors::PlayersRooms::CreatePlayersRooms.new.call(
+        Interactors::PlayersRooms::CreatePlayerRoom.new.call(
           player_id: player_id, room_id: room_id
         )
       end

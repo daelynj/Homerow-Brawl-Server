@@ -4,15 +4,15 @@ module Websocket
   module Interactor
     class RacePayload
       def call(room_id:)
-        players_in_room =
+        player_room_records =
           Interactors::PlayersRooms::FetchPlayersRooms.new.call(
             room_id: room_id
           )
-            .room_information
+            .player_room_records
 
         players = []
 
-        players_in_room.each do |player|
+        player_room_records.each do |player|
           players << { 'id' => player.player_id, 'position' => player.position }
         end
 

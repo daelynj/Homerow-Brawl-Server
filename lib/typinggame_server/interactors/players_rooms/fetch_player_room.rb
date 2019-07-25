@@ -13,7 +13,7 @@ module Interactors
 
       def call(player_id:, room_id:)
         @player_room_record =
-          @player_room_repository.find_players_rooms_records(
+          @players_rooms_repository.find_player_room_records(
             player_id: player_id, room_id: room_id
           )
       end

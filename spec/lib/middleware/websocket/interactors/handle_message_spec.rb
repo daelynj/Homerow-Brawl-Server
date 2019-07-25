@@ -6,12 +6,14 @@ RSpec.describe Websocket::Interactor::HandleMessage do
   let(:env) { { 'PATH_INFO' => "/#{room.id}" } }
   let(:connection) { double('connection', env: env) }
   let(:handle_message) { described_class.new }
-  let(:create_players_rooms) do
-    Interactors::PlayersRooms::CreatePlayersRooms.new
+  let(:create_player_room_record) do
+    Interactors::PlayersRooms::CreatePlayerRoom.new
   end
 
   describe '#call' do
-    before { create_players_rooms.call(player_id: player.id, room_id: room.id) }
+    before do
+      create_player_room_record.call(player_id: player.id, room_id: room.id)
+    end
 
     context 'when the client sends a position update' do
       let(:data) { { 'id' => player.id, 'position' => 30 } }
@@ -22,13 +24,13 @@ RSpec.describe Websocket::Interactor::HandleMessage do
 
         subject
 
-        room_information =
-          Interactors::PlayersRooms::FetchPlayersRooms.new.call(
-            room_id: room.id
+        player_room_record =
+          Interactors::PlayersRooms::FetchPlayerRoom.new.call(
+            player_id: player.id, room_id: room.id
           )
-            .room_information
+            .player_room_record
 
-        expect(room_information[0].position).to eq(30)
+        expect(player_room_record.position).to eq(30)
       end
 
       it 'sends all players in the room a race update' do

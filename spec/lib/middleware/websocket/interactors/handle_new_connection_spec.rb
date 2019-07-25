@@ -1,8 +1,8 @@
 RSpec.describe Websocket::Interactor::HandleNewConnection do
   let(:player) { Interactors::Players::CreatePlayer.new.call.player }
   let(:room) { Interactors::Rooms::CreateRoom.new.call.room }
-  let(:create_players_rooms) do
-    Interactors::PlayersRooms::CreatePlayersRooms.new
+  let(:create_player_room_record) do
+    Interactors::PlayersRooms::CreatePlayerRoom.new
   end
   let(:env) { { 'PATH_INFO' => "/#{room.id}" } }
   let(:connection) { double('connection', env: env) }
@@ -11,7 +11,9 @@ RSpec.describe Websocket::Interactor::HandleNewConnection do
   describe '#call' do
     subject { handle_new_connection.call(connection: connection) }
 
-    before { create_players_rooms.call(player_id: player.id, room_id: room.id) }
+    before do
+      create_player_room_record.call(player_id: player.id, room_id: room.id)
+    end
 
     it 'subscribes a new connection to a room' do
       allow(connection).to receive(:publish)
@@ -28,11 +30,11 @@ RSpec.describe Websocket::Interactor::HandleNewConnection do
 
       subject
 
-      room_information =
+      player_room_records =
         Interactors::PlayersRooms::FetchPlayersRooms.new.call(room_id: room.id)
-          .room_information
-      expect(room_information.length).to eq(2)
-      expect(room_information[0].room_id).to eq(room.id)
+          .player_room_records
+      expect(player_room_records.length).to eq(2)
+      expect(player_room_records[0].room_id).to eq(room.id)
     end
 
     it 'performs a player creation update' do

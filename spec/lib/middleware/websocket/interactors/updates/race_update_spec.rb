@@ -5,7 +5,9 @@ RSpec.describe Websocket::Interactor::RaceUpdate do
   let(:player_1) { Interactors::Players::CreatePlayer.new.call.player }
   let(:player_2) { Interactors::Players::CreatePlayer.new.call.player }
   let(:room) { Interactors::Rooms::CreateRoom.new.call.room }
-  let(:create_player_room) { Interactors::PlayersRooms::CreatePlayersRooms.new }
+  let(:create_player_room_record) do
+    Interactors::PlayersRooms::CreatePlayerRoom.new
+  end
 
   describe '#call' do
     subject do
@@ -13,8 +15,8 @@ RSpec.describe Websocket::Interactor::RaceUpdate do
     end
 
     before do
-      create_player_room.call(player_id: player_1.id, room_id: room.id)
-      create_player_room.call(player_id: player_2.id, room_id: room.id)
+      create_player_room_record.call(player_id: player_1.id, room_id: room.id)
+      create_player_room_record.call(player_id: player_2.id, room_id: room.id)
     end
 
     it 'publishes a race payload to the specified room' do
