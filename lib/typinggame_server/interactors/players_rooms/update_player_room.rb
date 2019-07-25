@@ -2,24 +2,24 @@ require 'hanami/interactor'
 
 module Interactors
   module PlayersRooms
-    class UpdatePlayersRooms
+    class UpdatePlayerRoom
       include Hanami::Interactor
 
-      expose :updated_players_rooms_record
+      expose :updated_player_room_record
 
       def initialize(repository: PlayersRoomsRepository.new)
         @players_rooms_repository = repository
       end
 
       def call(data:, room_id:)
-        players_rooms_record =
-          @players_rooms_repository.find_players_rooms_records(
+        player_room_record =
+          @players_rooms_repository.find_player_room_records(
             player_id: data['id'], room_id: room_id
           )
 
-        @updated_players_rooms_record =
+        @updated_player_room_record =
           @players_rooms_repository.update(
-            players_rooms_record.id,
+            player_room_record.id,
             position: data['position']
           )
       end
