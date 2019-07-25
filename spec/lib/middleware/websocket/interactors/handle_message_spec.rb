@@ -1,66 +1,57 @@
 require 'spec_helper'
 
 RSpec.describe Websocket::Interactor::HandleMessage do
-  let(:client_1) do
-    Websocket::Client.new(connection: double('connection').as_null_object)
+  let(:player) { Interactors::Players::CreatePlayer.new.call.player }
+  let(:room) { Interactors::Rooms::CreateRoom.new.call.room }
+  let(:env) { { 'PATH_INFO' => "/#{room.id}" } }
+  let(:connection) { double('connection', env: env) }
+  let(:handle_message) { described_class.new }
+  let(:create_players_rooms) do
+    Interactors::PlayersRooms::CreatePlayersRooms.new
   end
-  let(:client_2) do
-    Websocket::Client.new(connection: double('connection').as_null_object)
-  end
-  let(:room) { Websocket::Room.new(id: 1) }
-  let(:clients) { [client_1, client_2] }
 
   describe '#call' do
-    describe 'a position update' do
-      let(:data) { { 'position' => 5 } }
+    before { create_players_rooms.call(player_id: player.id, room_id: room.id) }
 
-      subject do
-        described_class.new.call(data: data, room: room, client: client_1)
-      end
+    context 'when the client sends a position update' do
+      let(:data) { { 'id' => player.id, 'position' => 30 } }
+      subject { handle_message.call(data: data, connection: connection) }
 
-      before do
-        room.add_client(client: client_1)
-        room.add_client(client: client_2)
-        client_1.room_id = 1
-        client_2.room_id = 1
-        allow(client_1.player).to receive(:id)
-        allow(client_2.player).to receive(:id)
-      end
+      it 'updates the players position' do
+        allow(connection).to receive(:publish)
 
-      it 'updates the clients position' do
         subject
-        expect(client_1.position).to eq(5)
+
+        room_information =
+          Interactors::PlayersRooms::FetchPlayersRooms.new.call(
+            room_id: room.id
+          )
+            .room_information
+
+        expect(room_information[0].position).to eq(30)
       end
 
-      it('updates all clients in the clients room with the race status') do
-        expect(client_1.connection).to receive(:write)
-        expect(client_2.connection).to receive(:write)
+      it 'sends all players in the room a race update' do
+        expect(connection).to receive(:publish).with(
+          "#{room.id}",
+          "{\"players\":[{\"id\":#{player.id},\"position\":30}]}"
+        )
+
         subject
       end
     end
 
-    describe 'the countdown has started' do
+    context 'when a player sends a countdown update' do
       let(:data) { { 'countdown' => true } }
-      subject do
-        described_class.new.call(data: data, room: room, client: client_1)
-      end
 
-      before do
-        room.add_client(client: client_1)
-        room.add_client(client: client_2)
-        client_1.room_id = 1
-        client_2.room_id = 1
-        allow(client_1.player).to receive(:id)
-        allow(client_2.player).to receive(:id)
-      end
+      subject { handle_message.call(data: data, connection: connection) }
 
-      it 'updates all clients in the clients room with the timer status' do
-        expect(client_1.connection).to receive(:write).with(
+      it 'sends all players in the room a countdown update' do
+        expect(connection).to receive(:publish).with(
+          "#{room.id}",
           '{"countdown":true}'
         )
-        expect(client_2.connection).to receive(:write).with(
-          '{"countdown":true}'
-        )
+
         subject
       end
     end
