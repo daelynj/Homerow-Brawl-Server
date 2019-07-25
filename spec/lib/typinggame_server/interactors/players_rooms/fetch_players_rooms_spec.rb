@@ -4,7 +4,7 @@ RSpec.describe Interactors::PlayersRooms::FetchPlayersRooms do
   let(:player_1) { Interactors::Players::CreatePlayer.new.call.player }
   let(:player_2) { Interactors::Players::CreatePlayer.new.call.player }
   let(:room) { Interactors::Rooms::CreateRoom.new.call.room }
-  let(:repository) { PlayersRoomsRepository.new }
+  let(:repository) { PlayerRoomRepository.new }
   let(:create_player_room_record) do
     Interactors::PlayersRooms::CreatePlayerRoom.new
   end

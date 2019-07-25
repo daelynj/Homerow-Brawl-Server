@@ -3,7 +3,7 @@ require 'spec_helper'
 RSpec.describe Interactors::PlayersRooms::FetchPlayerRoom do
   let(:player) { Interactors::Players::CreatePlayer.new.call.player }
   let(:room) { Interactors::Rooms::CreateRoom.new.call.room }
-  let(:repository) { PlayersRoomsRepository.new }
+  let(:repository) { PlayerRoomRepository.new }
   let(:create_player_room_record) do
     Interactors::PlayersRooms::CreatePlayerRoom.new
   end

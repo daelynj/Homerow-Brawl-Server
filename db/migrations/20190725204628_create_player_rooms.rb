@@ -1,6 +1,6 @@
 Hanami::Model.migration do
   change do
-    create_table :players_rooms do
+    create_table :player_rooms do
       primary_key :id
       foreign_key :player_id, :players
       foreign_key :room_id, :rooms
