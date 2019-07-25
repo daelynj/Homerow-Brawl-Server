@@ -1,6 +1,6 @@
 require 'spec_helper'
 
-describe Interactors::Players::FetchPlayer do
+RSpec.describe Interactors::Players::FetchPlayer do
   let(:repository) { PlayerRepository.new }
   let(:fetch_player) { described_class.new(repository: repository) }
   let(:params) { 1 }

@@ -1,6 +1,6 @@
 require 'spec_helper'
 
-describe Interactors::Rooms::CreateRoom do
+RSpec.describe Interactors::Rooms::CreateRoom do
   let(:repository) { RoomRepository.new }
   let(:create_room) { described_class.new(repository: repository) }
   let(:result) { create_room.call }
