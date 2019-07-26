@@ -14,14 +14,10 @@ module Websocket
       )
     end
 
-    def on_shutdown(connection)
-      puts 'socket closing from the server'
-    end
+    def on_shutdown(connection); end
 
     def on_close(connection)
-      #find the Player and delete them
-      #find the associated table entry and delete it
-      #check if the room is empty - if yes, delete it
+      connection.unsubscribe("#{connection.env['PATH_INFO'][1..]}")
     end
   end
 end
