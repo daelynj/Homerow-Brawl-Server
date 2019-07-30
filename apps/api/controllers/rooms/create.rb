@@ -11,8 +11,6 @@ module Api
         end
 
         def call(_params)
-          headers['Access-Control-Allow-Origin'] = '*'
-          headers['Access-Control-Request-Method'] = '*'
           @room = @create_room.call.room
         end
       end
