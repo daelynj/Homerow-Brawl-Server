@@ -1,2 +1,4 @@
 /public/assets*
 /tmp
+.env.development
+.env.test
