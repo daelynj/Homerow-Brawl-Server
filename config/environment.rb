@@ -7,6 +7,13 @@ require_relative '../apps/api/application'
 require_relative '../lib/middleware/websocket/connection'
 
 Hanami.configure do
+  middleware.use Rack::Cors do
+    allow do
+      origins '*'
+      resource '*', headers: :any, methods: %i[get post options]
+    end
+  end
+
   middleware.use Websocket::Connection
 
   mount Api::Application, at: '/api'
