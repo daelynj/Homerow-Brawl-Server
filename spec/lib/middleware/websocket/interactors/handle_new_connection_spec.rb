@@ -1,18 +1,23 @@
 RSpec.describe Websocket::Interactor::HandleNewConnection do
-  let(:player) { Interactors::Players::CreatePlayer.new.call.player }
-  let(:room) { Interactors::Rooms::CreateRoom.new.call.room }
-  let(:create_player_room_record) do
-    Interactors::PlayersRooms::CreatePlayerRoom.new
+  let(:player_attributes) { { 'id' => 1, 'name' => 'octane' } }
+  let(:team) { { 'id' => 'X0klA3' } }
+  let(:access_token) { 'fdgdfg908g9n9gf09fgh8' }
+  let(:player) do
+    Interactors::Players::CreatePlayer.new.call(
+      player_attributes: player_attributes,
+      team: team,
+      access_token: access_token
+    )
+      .player
   end
+  let(:room) { Interactors::Rooms::CreateRoom.new.call.room }
   let(:env) { { 'PATH_INFO' => "/#{room.id}" } }
   let(:connection) { double('connection', env: env) }
   let(:handle_new_connection) { described_class.new }
 
   describe '#call' do
-    subject { handle_new_connection.call(connection: connection) }
-
-    before do
-      create_player_room_record.call(player_id: player.id, room_id: room.id)
+    subject do
+      handle_new_connection.call(uuid: player.uuid, connection: connection)
     end
 
     it 'subscribes a new connection to a room' do
@@ -33,7 +38,8 @@ RSpec.describe Websocket::Interactor::HandleNewConnection do
       player_room_records =
         Interactors::PlayersRooms::FetchPlayersRooms.new.call(room_id: room.id)
           .player_room_records
-      expect(player_room_records.length).to eq(2)
+
+      expect(player_room_records.length).to eq(1)
       expect(player_room_records[0].room_id).to eq(room.id)
     end
 
@@ -41,7 +47,9 @@ RSpec.describe Websocket::Interactor::HandleNewConnection do
       allow(connection).to receive(:subscribe)
       allow(connection).to receive(:publish)
 
-      expect(connection).to receive(:write).with("{\"id\":#{player.id + 1}}")
+      expect(connection).to receive(:write).with(
+        "{\"id\":#{player.id},\"name\":\"octane\"}"
+      )
       subject
     end
 
@@ -51,9 +59,9 @@ RSpec.describe Websocket::Interactor::HandleNewConnection do
 
       expect(connection).to receive(:publish).with(
         "#{room.id}",
-        "{\"players\":[{\"id\":#{player.id},\"position\":0},{\"id\":#{
-          player.id + 1
-        },\"position\":0}]}"
+        "{\"players\":[{\"id\":#{
+          player.id
+        },\"name\":\"octane\",\"position\":0}]}"
       )
       subject
     end
