@@ -9,6 +9,7 @@ gem 'pry'
 gem 'iodine'
 gem 'faraday'
 gem 'rack-cors'
+gem 'vcr'
 
 gem 'pg'
 
