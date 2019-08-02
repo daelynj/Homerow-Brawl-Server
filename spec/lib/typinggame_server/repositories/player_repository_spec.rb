@@ -2,33 +2,75 @@ require 'spec_helper'
 
 RSpec.describe PlayerRepository, type: :repository do
   let(:repository) { PlayerRepository.new }
-  let(:uuid) { SecureRandom.uuid }
+  let(:player_attributes) { { 'id' => 1, 'name' => 'octane' } }
+  let(:team) { { 'id' => 'X0klA3' } }
+  let(:access_token) { 'fdgdfg908g9n9gf09fgh8' }
+  let(:player) do
+    repository.create(
+      player_id: '1',
+      name: 'octane',
+      team_id: 'X0klA3',
+      access_token: 'fdgdfg908g9n9gf09fgh8'
+    )
+  end
 
-  before { @player = repository.create(id: '1', token: uuid) }
+  describe '#find_by_access_token' do
+    context 'nil input' do
+      let(:result) { repository.find_by_access_token(access_token: nil) }
 
-  context 'nil input' do
-    let(:result) { repository.find_by_token(token: nil) }
+      it 'is unsuccessful' do
+        expect(result).to be(nil)
+      end
+    end
 
-    it 'is unsuccessful' do
-      expect(result).to be(nil)
+    context 'bad input' do
+      let(:result) do
+        repository.find_by_access_token(
+          access_token: '2bbca412-65cc-4e35-a5b3-6a0a0fd'
+        )
+      end
+
+      it 'is unsuccessful' do
+        expect(result).to be(nil)
+      end
+    end
+
+    context 'good input' do
+      let(:result) do
+        repository.find_by_access_token(access_token: player.access_token)
+      end
+
+      it 'returns the player' do
+        expect(result).to eq(player)
+      end
     end
   end
 
-  context 'bad input' do
-    let(:result) do
-      repository.find_by_token(token: '2bbca412-65cc-4e35-a5b3-6a0a0fd')
+  describe '#find_by_uuid' do
+    context 'nil input' do
+      let(:result) { repository.find_by_uuid(uuid: nil) }
+
+      it 'is unsuccessful' do
+        expect(result).to be(nil)
+      end
     end
 
-    it 'is unsuccessful' do
-      expect(result).to be(nil)
+    context 'bad input' do
+      let(:result) do
+        repository.find_by_uuid(uuid: '2bbca412-65cc-4e35-a5b3-6a0a0fd')
+      end
+
+      it 'is unsuccessful' do
+        expect(result).to be(nil)
+      end
     end
-  end
 
-  context 'good input' do
-    let(:result) { repository.find_by_token(token: uuid) }
+    context 'good input' do
+      let(:result) { repository.find_by_uuid(uuid: player.uuid) }
 
-    it 'returns the player' do
-      expect(result).to eq(@player)
+      it 'returns the player' do
+        expect(result).to eq(player)
+      end
     end
   end
 end
