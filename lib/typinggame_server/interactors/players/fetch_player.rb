@@ -8,11 +8,16 @@ module Interactors
       expose :player
 
       def initialize(repository: PlayerRepository.new)
-        @players_repository = repository
+        @player_repository = repository
       end
 
-      def call(params)
-        @player = @players_repository.find(params)
+      def call(access_token: nil, uuid: nil)
+        if uuid.nil?
+          @player =
+            @player_repository.find_by_access_token(access_token: access_token)
+        elsif access_token.nil?
+          @player = @player_repository.find_by_uuid(uuid: uuid)
+        end
       end
     end
   end
