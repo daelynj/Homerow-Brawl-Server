@@ -7,16 +7,14 @@ module Websocket
         players_names_positions =
           fetch_players_names_positions(room_id: room_id)
 
-        players = []
-
-        players_names_positions.each do |player|
-          players <<
+        players =
+          players_names_positions.map do |player|
             {
               'id' => player[:player_id],
               'name' => player[:name],
               'position' => player[:position]
             }
-        end
+          end
 
         { 'players' => players }.to_json
       end
