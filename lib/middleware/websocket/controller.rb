@@ -1,11 +1,10 @@
-require './lib/middleware/websocket/interactors/handle_new_connection'
 require './lib/middleware/websocket/interactors/handle_message'
 require 'json'
 
 module Websocket
   class Controller
     def on_open(connection)
-      Interactor::HandleNewConnection.new.call(connection: connection)
+      #do nothing, we don't know you yet
     end
 
     def on_message(connection, data)
