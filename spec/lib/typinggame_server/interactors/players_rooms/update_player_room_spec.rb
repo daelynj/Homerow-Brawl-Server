@@ -1,7 +1,17 @@
 require 'spec_helper'
 
 RSpec.describe Interactors::PlayersRooms::UpdatePlayerRoom do
-  let(:player) { Interactors::Players::CreatePlayer.new.call.player }
+  let(:player_attributes) { { 'id' => 1, 'name' => 'octane' } }
+  let(:team) { { 'id' => 'X0klA3' } }
+  let(:access_token) { 'fdgdfg908g9n9gf09fgh8' }
+  let(:player) do
+    Interactors::Players::CreatePlayer.new.call(
+      player_attributes: player_attributes,
+      team: team,
+      access_token: access_token
+    )
+      .player
+  end
   let(:room) { Interactors::Rooms::CreateRoom.new.call.room }
   let(:data) { { 'id' => player.id, 'position' => 30 } }
   let(:repository) { PlayerRoomRepository.new }
