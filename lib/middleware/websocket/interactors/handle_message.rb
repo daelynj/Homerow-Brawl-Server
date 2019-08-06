@@ -40,7 +40,7 @@ module Websocket
       def player_verified?(uuid:)
         player = Interactors::Players::FetchPlayer.new.call(uuid: uuid).player
 
-        player.nil? ? false : true
+        !player.nil?
       end
     end
   end
