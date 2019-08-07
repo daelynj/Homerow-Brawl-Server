@@ -8,19 +8,19 @@ module Websocket
       InvalidType = Class.new(StandardError)
 
       def call(update:, connection:)
-        case update.fetch(:type)
+        case update.fetch('type')
         when 'join'
-          Model::JoinUpdate.new(uuid: update[:uuid])
+          Model::JoinUpdate.new(uuid: update['uuid'])
         when 'position'
           Model::RaceUpdate.new(
-            id: update[:id],
-            uuid: update[:uuid],
-            name: update[:name],
-            position: update[:position]
+            id: update['id'],
+            uuid: update['uuid'],
+            name: update['name'],
+            position: update['position']
           )
         when 'countdown'
           Model::CountdownUpdate.new(
-            uuid: update[:uuid], countdown_state: update[:countdown]
+            uuid: update['uuid'], countdown_state: update['countdown']
           )
         else
           raise InvalidType
