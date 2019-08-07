@@ -13,7 +13,6 @@ RSpec.describe Interactors::PlayersRooms::UpdatePlayerRoom do
       .player
   end
   let(:room) { Interactors::Rooms::CreateRoom.new.call.room }
-  let(:data) { { 'id' => player.id, 'position' => 30 } }
   let(:repository) { PlayerRoomRepository.new }
   let(:create_player_room_record) do
     Interactors::PlayersRooms::CreatePlayerRoom.new
@@ -23,7 +22,11 @@ RSpec.describe Interactors::PlayersRooms::UpdatePlayerRoom do
   end
 
   context 'when the player and room exist' do
-    subject { update_player_room_record.call(data: data, room_id: room.id) }
+    subject do
+      update_player_room_record.call(
+        player_id: player.id, position: 30, room_id: room.id
+      )
+    end
 
     before do
       create_player_room_record.call(player_id: player.id, room_id: room.id)
