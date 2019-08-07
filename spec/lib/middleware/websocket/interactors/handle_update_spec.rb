@@ -1,6 +1,6 @@
 require 'spec_helper'
 
-RSpec.describe Websocket::Interactor::HandleMessage do
+RSpec.describe Websocket::Interactor::HandleUpdate do
   let(:player_attributes) { { 'id' => 1, 'name' => 'octane' } }
   let(:team) { { 'id' => 'X0klA3' } }
   let(:access_token) { 'fdgdfg908g9n9gf09fgh8' }
@@ -15,7 +15,7 @@ RSpec.describe Websocket::Interactor::HandleMessage do
   let(:room) { Interactors::Rooms::CreateRoom.new.call.room }
   let(:env) { { 'PATH_INFO' => "/#{room.id}" } }
   let(:connection) { double('connection', env: env) }
-  let(:handle_message) { described_class.new }
+  let(:handle_update) { described_class.new }
   let(:create_player_room_record) do
     Interactors::PlayersRooms::CreatePlayerRoom.new
   end
@@ -25,9 +25,13 @@ RSpec.describe Websocket::Interactor::HandleMessage do
       create_player_room_record.call(player_id: player.id, room_id: room.id)
     end
 
-    context 'when the client sends their uuid' do
-      let(:data) { { 'type' => 'join', 'uuid' => player.uuid } }
-      subject { handle_message.call(data: data, connection: connection) }
+    context 'when the client sends a join update' do
+      let(:update_model) do
+        Websocket::Interactor::Model::JoinUpdate.new(uuid: player.uuid)
+      end
+      subject do
+        handle_update.call(update_model: update_model, connection: connection)
+      end
 
       it 'subscribes the player to a room, and performs player join and race updates' do
         expect(connection).to receive(:subscribe).with("#{room.id}")
@@ -45,16 +49,14 @@ RSpec.describe Websocket::Interactor::HandleMessage do
     end
 
     context 'when the client sends a position update with a proper UUID' do
-      let(:data) do
-        {
-          'type' => 'position',
-          'id' => player.id,
-          'uuid' => player.uuid,
-          'name' => 'octane',
-          'position' => 30
-        }
+      let(:update_model) do
+        Websocket::Interactor::Model::RaceUpdate.new(
+          id: player.id, uuid: player.uuid, name: 'octane', position: 30
+        )
       end
-      subject { handle_message.call(data: data, connection: connection) }
+      subject do
+        handle_update.call(update_model: update_model, connection: connection)
+      end
 
       it 'updates the players position' do
         allow(connection).to receive(:publish)
@@ -83,17 +85,17 @@ RSpec.describe Websocket::Interactor::HandleMessage do
     end
 
     context 'when the client sends a position update with an improper UUID' do
-      let(:data) do
-        {
-          'type' => 'position',
-          'id' => player.id,
-          'uuid' => 'improper uuid',
-          'name' => 'octane',
-          'position' => 30
-        }
+      let(:update_model) do
+        Websocket::Interactor::Model::RaceUpdate.new(
+          id: player.id,
+          uuid: '6a380919-ef98-48c5-8461-12bc5790f2e6',
+          name: 'octane',
+          position: 30
+        )
       end
-
-      subject { handle_message.call(data: data, connection: connection) }
+      subject do
+        handle_update.call(update_model: update_model, connection: connection)
+      end
 
       it 'fails to perform the update' do
         expect(subject).to be(nil)
@@ -101,11 +103,14 @@ RSpec.describe Websocket::Interactor::HandleMessage do
     end
 
     context 'when a player sends a countdown update' do
-      let(:data) do
-        { 'type' => 'countdown', 'uuid' => player.uuid, 'countdown' => true }
+      let(:update_model) do
+        Websocket::Interactor::Model::CountdownUpdate.new(
+          uuid: player.uuid, countdown_state: true
+        )
       end
-
-      subject { handle_message.call(data: data, connection: connection) }
+      subject do
+        handle_update.call(update_model: update_model, connection: connection)
+      end
 
       it 'sends all players in the room a countdown update' do
         expect(connection).to receive(:publish).with(
@@ -114,18 +119,6 @@ RSpec.describe Websocket::Interactor::HandleMessage do
         )
 
         subject
-      end
-    end
-
-    context 'bad data' do
-      let(:data) do
-        { 'type' => 'bad', 'uuid' => player.uuid, 'countdown' => true }
-      end
-
-      subject { handle_message.call(data: data, connection: connection) }
-
-      it 'raises an InvalidType error' do
-        expect { subject }.to raise_error(described_class::InvalidType)
       end
     end
   end

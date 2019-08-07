@@ -6,34 +6,32 @@ require './lib/typinggame_server/interactors/players/fetch_player'
 
 module Websocket
   module Interactor
-    class HandleMessage
-      InvalidType = Class.new(StandardError)
-
-      def call(data:, connection:)
+    class HandleUpdate
+      def call(update_model:, connection:)
         room_id = connection.env['PATH_INFO'][1..].to_i
 
-        return if !player_verified?(uuid: data['uuid'])
+        return if !player_verified?(uuid: update_model.uuid)
 
-        case data.fetch('type')
+        case update_model.type
         when 'join'
           Interactor::HandleNewConnection.new.call(
-            uuid: data['uuid'], connection: connection
+            uuid: update_model.uuid, connection: connection
           )
         when 'position'
-          update_player_position(data: data, room_id: room_id)
+          update_player_position(update_model: update_model, room_id: room_id)
           RaceUpdate.new.call(connection: connection, room_id: room_id)
         when 'countdown'
           TimerUpdate.new.call(connection: connection, room_id: room_id)
-        else
-          raise InvalidType
         end
       end
 
       private
 
-      def update_player_position(data:, room_id:)
+      def update_player_position(update_model:, room_id:)
         Interactors::PlayersRooms::UpdatePlayerRoom.new.call(
-          data: data, room_id: room_id
+          player_id: update_model.id,
+          position: update_model.position,
+          room_id: room_id
         )
       end
 
