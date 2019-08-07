@@ -8,10 +8,6 @@ module Websocket
           @type = 'join'
           @uuid = uuid
         end
-
-        def to_json
-          { type: @type, uuid: @uuid }.to_json
-        end
       end
     end
   end
