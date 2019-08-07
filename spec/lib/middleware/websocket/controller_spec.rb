@@ -25,7 +25,7 @@ RSpec.describe Websocket::Controller do
     end
 
     context 'joining player' do
-      let(:data) { { 'type' => 'join', 'uuid' => player.uuid }.to_json }
+      let(:data) { { type: 'join', uuid: player.uuid }.to_json }
 
       subject { described_class.new.on_message(connection, data) }
 
@@ -47,10 +47,7 @@ RSpec.describe Websocket::Controller do
     context 'race update' do
       let(:data) do
         {
-          'type' => 'position',
-          'uuid' => player.uuid,
-          'id' => player.id,
-          'position' => 30
+          type: 'position', uuid: player.uuid, id: player.id, position: 30
         }.to_json
       end
 
@@ -64,9 +61,7 @@ RSpec.describe Websocket::Controller do
 
     context 'countdown update' do
       let(:data) do
-        {
-          'type' => 'countdown', 'uuid' => player.uuid, 'countdown' => true
-        }.to_json
+        { type: 'countdown', uuid: player.uuid, countdown: true }.to_json
       end
 
       subject { described_class.new.on_message(connection, data) }

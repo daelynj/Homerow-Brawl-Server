@@ -9,11 +9,11 @@ RSpec.describe Websocket::Interactor::BuildUpdateModel do
     context 'a position update' do
       let(:update) do
         {
-          type: 'position',
-          id: 1,
-          uuid: '6a380919-ef98-48c5-8461-12bc5790f2e6',
-          name: 'octane',
-          position: 30
+          'type' => 'position',
+          'id' => 1,
+          'uuid' => '6a380919-ef98-48c5-8461-12bc5790f2e6',
+          'name' => 'octane',
+          'position' => 30
         }
       end
 
@@ -26,7 +26,7 @@ RSpec.describe Websocket::Interactor::BuildUpdateModel do
 
     context 'a join update' do
       let(:update) do
-        { type: 'join', uuid: '6a380919-ef98-48c5-8461-12bc5790f2e6' }
+        { 'type' => 'join', 'uuid' => '6a380919-ef98-48c5-8461-12bc5790f2e6' }
       end
 
       subject do
@@ -39,9 +39,9 @@ RSpec.describe Websocket::Interactor::BuildUpdateModel do
     context 'a countdown update' do
       let(:update) do
         {
-          type: 'countdown',
-          uuid: '6a380919-ef98-48c5-8461-12bc5790f2e6',
-          countdown: true
+          'type' => 'countdown',
+          'uuid' => '6a380919-ef98-48c5-8461-12bc5790f2e6',
+          'countdown' => true
         }
       end
 
