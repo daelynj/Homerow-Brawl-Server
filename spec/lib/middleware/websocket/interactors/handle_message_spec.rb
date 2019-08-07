@@ -26,7 +26,7 @@ RSpec.describe Websocket::Interactor::HandleMessage do
     end
 
     context 'when the client sends their uuid' do
-      let(:data) { { 'uuid' => player.uuid } }
+      let(:data) { { 'type' => 'join', 'uuid' => player.uuid } }
       subject { handle_message.call(data: data, connection: connection) }
 
       it 'subscribes the player to a room, and performs player join and race updates' do
@@ -47,6 +47,7 @@ RSpec.describe Websocket::Interactor::HandleMessage do
     context 'when the client sends a position update with a proper UUID' do
       let(:data) do
         {
+          'type' => 'position',
           'id' => player.id,
           'uuid' => player.uuid,
           'name' => 'octane',
@@ -84,6 +85,7 @@ RSpec.describe Websocket::Interactor::HandleMessage do
     context 'when the client sends a position update with an improper UUID' do
       let(:data) do
         {
+          'type' => 'position',
           'id' => player.id,
           'uuid' => 'improper uuid',
           'name' => 'octane',
@@ -99,7 +101,9 @@ RSpec.describe Websocket::Interactor::HandleMessage do
     end
 
     context 'when a player sends a countdown update' do
-      let(:data) { { 'uuid' => player.uuid, 'countdown' => true } }
+      let(:data) do
+        { 'type' => 'countdown', 'uuid' => player.uuid, 'countdown' => true }
+      end
 
       subject { handle_message.call(data: data, connection: connection) }
 
@@ -110,6 +114,18 @@ RSpec.describe Websocket::Interactor::HandleMessage do
         )
 
         subject
+      end
+    end
+
+    context 'bad data' do
+      let(:data) do
+        { 'type' => 'bad', 'uuid' => player.uuid, 'countdown' => true }
+      end
+
+      subject { handle_message.call(data: data, connection: connection) }
+
+      it 'raises an InvalidType error' do
+        expect { subject }.to raise_error(described_class::InvalidType)
       end
     end
   end
