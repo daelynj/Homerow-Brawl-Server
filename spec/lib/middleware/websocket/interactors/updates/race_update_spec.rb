@@ -43,7 +43,7 @@ RSpec.describe Websocket::Interactor::RaceUpdate do
     it 'publishes a race payload to the specified room' do
       expect(connection).to receive(:publish).with(
         "#{room.id}",
-        "{\"players\":[{\"id\":#{
+        "{\"type\":\"position\",\"players\":[{\"id\":#{
           player_1.id
         },\"name\":\"octane\",\"position\":0},{\"id\":#{
           player_2.id
