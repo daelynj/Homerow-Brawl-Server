@@ -82,4 +82,50 @@ RSpec.describe PlayerRoomRepository, type: :repository do
       )
     end
   end
+
+  describe '#find_players_names_stats' do
+    subject { repository.find_players_names_stats(room_id: room.id) }
+
+    before do
+      repository.create(
+        player_id: player_1.id,
+        words_typed: 10,
+        time: 4,
+        mistakes: 2,
+        letters_typed: 50,
+        room_id: room.id
+      )
+      repository.create(
+        player_id: player_2.id,
+        words_typed: 10,
+        time: 6,
+        mistakes: 1,
+        letters_typed: 50,
+        room_id: room.id
+      )
+    end
+
+    it 'joins the players table and player_rooms table' do
+      expect(subject).to eq(
+        [
+          {
+            letters_typed: 50,
+            mistakes: 2,
+            name: 'octane',
+            player_id: player_1.id,
+            time: 4,
+            words_typed: 10
+          },
+          {
+            letters_typed: 50,
+            mistakes: 1,
+            name: 'dominus',
+            player_id: player_2.id,
+            time: 6,
+            words_typed: 10
+          }
+        ]
+      )
+    end
+  end
 end

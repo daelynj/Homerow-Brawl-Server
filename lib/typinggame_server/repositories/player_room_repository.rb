@@ -16,4 +16,14 @@ class PlayerRoomRepository < Hanami::Repository
       .map
       .to_a
   end
+
+  def find_players_names_stats(room_id:)
+    player_rooms.read(
+      "SELECT players.name, player_rooms.player_id, player_rooms.words_typed, player_rooms.time, player_rooms.mistakes, player_rooms.letters_typed FROM player_rooms JOIN players ON players.id = player_rooms.player_id WHERE room_id = #{
+        room_id
+      } AND player_rooms.words_typed IS NOT NULL"
+    )
+      .map
+      .to_a
+  end
 end
