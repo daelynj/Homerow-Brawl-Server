@@ -51,5 +51,26 @@ RSpec.describe Websocket::Interactor::BuildUpdateModel do
 
       it { is_expected.to be_a(Websocket::Interactor::Model::CountdownUpdate) }
     end
+
+    context 'a stats update' do
+      let(:update) do
+        {
+          'type' => 'stats',
+          'uuid' => '25b26b4e-b0c2-49b0-bb06-3dc707cb7c6c',
+          'id' => 1,
+          'name' => 'octane',
+          'words_typed' => 3,
+          'time' => 1,
+          'mistakes' => 0,
+          'letters_typed' => 10
+        }
+      end
+
+      subject do
+        build_update_model.call(update: update, connection: connection)
+      end
+
+      it { is_expected.to be_a(Websocket::Interactor::Model::StatsUpdate) }
+    end
   end
 end
