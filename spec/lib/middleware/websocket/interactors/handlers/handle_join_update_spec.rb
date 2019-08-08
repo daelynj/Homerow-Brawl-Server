@@ -1,4 +1,6 @@
-RSpec.describe Websocket::Interactor::HandleNewConnection do
+require 'spec_helper'
+
+RSpec.describe Websocket::Interactor::Handler::HandleJoinUpdate do
   let(:player_attributes) { { 'id' => 1, 'name' => 'octane' } }
   let(:team) { { 'id' => 'X0klA3' } }
   let(:access_token) { 'fdgdfg908g9n9gf09fgh8' }
@@ -13,11 +15,11 @@ RSpec.describe Websocket::Interactor::HandleNewConnection do
   let(:room) { Interactors::Rooms::CreateRoom.new.call.room }
   let(:env) { { 'PATH_INFO' => "/#{room.id}" } }
   let(:connection) { double('connection', env: env) }
-  let(:handle_new_connection) { described_class.new }
+  let(:handle_join_update) { described_class.new }
 
   describe '#call' do
     subject do
-      handle_new_connection.call(uuid: player.uuid, connection: connection)
+      handle_join_update.call(uuid: player.uuid, connection: connection)
     end
 
     it 'subscribes a new connection to a room' do
@@ -48,7 +50,7 @@ RSpec.describe Websocket::Interactor::HandleNewConnection do
       allow(connection).to receive(:publish)
 
       expect(connection).to receive(:write).with(
-        "{\"id\":#{player.id},\"name\":\"octane\"}"
+        "{\"type\":\"join\",\"id\":#{player.id},\"name\":\"octane\"}"
       )
       subject
     end
@@ -59,7 +61,7 @@ RSpec.describe Websocket::Interactor::HandleNewConnection do
 
       expect(connection).to receive(:publish).with(
         "#{room.id}",
-        "{\"players\":[{\"id\":#{
+        "{\"type\":\"position\",\"players\":[{\"id\":#{
           player.id
         },\"name\":\"octane\",\"position\":0}]}"
       )
