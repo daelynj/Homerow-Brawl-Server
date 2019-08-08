@@ -32,11 +32,11 @@ RSpec.describe Websocket::Controller do
       it 'handles the joining the player' do
         expect(connection).to receive(:subscribe).with(room.id.to_s)
         expect(connection).to receive(:write).with(
-          "{\"id\":#{player.id},\"name\":\"octane\"}"
+          "{\"type\":\"join\",\"id\":#{player.id},\"name\":\"octane\"}"
         )
         expect(connection).to receive(:publish).with(
           "#{room.id}",
-          "{\"players\":[{\"id\":#{
+          "{\"type\":\"position\",\"players\":[{\"id\":#{
             player.id
           },\"name\":\"octane\",\"position\":0}]}"
         )

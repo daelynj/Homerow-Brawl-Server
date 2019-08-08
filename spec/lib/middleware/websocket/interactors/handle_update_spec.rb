@@ -36,11 +36,11 @@ RSpec.describe Websocket::Interactor::HandleUpdate do
       it 'subscribes the player to a room, and performs player join and race updates' do
         expect(connection).to receive(:subscribe).with("#{room.id}")
         expect(connection).to receive(:write).with(
-          "{\"id\":#{player.id},\"name\":\"octane\"}"
+          "{\"type\":\"join\",\"id\":#{player.id},\"name\":\"octane\"}"
         )
         expect(connection).to receive(:publish).with(
           "#{room.id}",
-          "{\"players\":[{\"id\":#{
+          "{\"type\":\"position\",\"players\":[{\"id\":#{
             player.id
           },\"name\":\"octane\",\"position\":0}]}"
         )
@@ -75,7 +75,7 @@ RSpec.describe Websocket::Interactor::HandleUpdate do
       it 'sends all players in the room a race update' do
         expect(connection).to receive(:publish).with(
           "#{room.id}",
-          "{\"players\":[{\"id\":#{
+          "{\"type\":\"position\",\"players\":[{\"id\":#{
             player.id
           },\"name\":\"octane\",\"position\":30}]}"
         )
@@ -115,7 +115,7 @@ RSpec.describe Websocket::Interactor::HandleUpdate do
       it 'sends all players in the room a countdown update' do
         expect(connection).to receive(:publish).with(
           "#{room.id}",
-          '{"countdown":true}'
+          '{"type":"countdown","countdown":true}'
         )
 
         subject
