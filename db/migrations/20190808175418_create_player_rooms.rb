@@ -6,8 +6,7 @@ Hanami::Model.migration do
       add_column :words_typed, Integer
       add_column :time, Integer
       add_column :mistakes, Integer
-      add_column :accuracy, Integer
-      add_column :wpm, Integer
+      add_column :letters_typed, Integer
     end
   end
 end
