@@ -121,5 +121,33 @@ RSpec.describe Websocket::Interactor::HandleUpdate do
         subject
       end
     end
+
+    context 'when a player sends a stat update' do
+      let(:update_model) do
+        Websocket::Interactor::Model::StatsUpdate.new(
+          id: player.id,
+          uuid: player.uuid,
+          name: 'octane',
+          words_typed: 15,
+          time: 4,
+          mistakes: 3,
+          letters_typed: 75
+        )
+      end
+      subject do
+        handle_update.call(update_model: update_model, connection: connection)
+      end
+
+      it 'sends all players in the room a stats update' do
+        expect(connection).to receive(:publish).with(
+          "#{room.id}",
+          "{\"type\":\"stats\",\"players\":[{\"id\":#{
+            player.id
+          },\"name\":\"octane\",\"words_typed\":15,\"time\":4,\"mistakes\":3,\"accuracy\":96.0,\"wpm\":225}]}"
+        )
+
+        subject
+      end
+    end
   end
 end

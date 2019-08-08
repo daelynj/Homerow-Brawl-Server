@@ -2,6 +2,7 @@ require './lib/middleware/websocket/interactors/verify_player'
 require './lib/middleware/websocket/interactors/handlers/handle_join_update'
 require './lib/middleware/websocket/interactors/handlers/handle_position_update'
 require './lib/middleware/websocket/interactors/handlers/handle_countdown_update'
+require './lib/middleware/websocket/interactors/handlers/handle_stats_update'
 
 module Websocket
   module Interactor
@@ -26,6 +27,10 @@ module Websocket
         when 'countdown'
           Handler::HandleCountdownUpdate.new.call(
             connection: connection, room_id: room_id
+          )
+        when 'stats'
+          Handler::HandleStatsUpdate.new.call(
+            connection: connection, room_id: room_id, update_model: update_model
           )
         end
       end
