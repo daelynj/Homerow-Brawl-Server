@@ -22,6 +22,16 @@ module Websocket
           Model::CountdownUpdate.new(
             uuid: update['uuid'], countdown_state: update['countdown']
           )
+        when 'stats'
+          Model::StatsUpdate.new(
+            id: update['id'],
+            uuid: update['uuid'],
+            name: update['name'],
+            words_typed: update['words_typed'],
+            time: update['time'],
+            mistakes: update['mistakes'],
+            letters_typed: update['letters_typed']
+          )
         else
           raise InvalidType
         end
