@@ -10,8 +10,11 @@ module Websocket
     module Handler
       class HandleJoinUpdate
         def call(uuid:, connection:)
+          room_id = connection.env['PATH_INFO']
+          room_id.delete!('/').to_i
+
           player = fetch_player(uuid: uuid)
-          room = fetch_room(id: connection.env['PATH_INFO'][1..].to_i)
+          room = fetch_room(id: room_id)
           connection.subscribe "#{room.id}"
 
           build_association(player_id: player.id, room_id: room.id)
