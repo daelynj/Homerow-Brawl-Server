@@ -8,7 +8,8 @@ module Websocket
   module Interactor
     class HandleUpdate
       def call(update_model:, connection:)
-        room_id = connection.env['PATH_INFO'][1..].to_i
+        room_id = connection.env['PATH_INFO']
+        room_id.delete!('/').to_i
 
         return if !VerifyPlayer.new.call(uuid: update_model.uuid)
 

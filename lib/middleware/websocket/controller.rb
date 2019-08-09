@@ -22,7 +22,9 @@ module Websocket
     def on_shutdown(connection); end
 
     def on_close(connection)
-      connection.unsubscribe("#{connection.env['PATH_INFO'][1..]}")
+      room_id = connection.env['PATH_INFO']
+      room_id.delete!('/').to_i
+      connection.unsubscribe("#{room_id}")
     end
   end
 end
