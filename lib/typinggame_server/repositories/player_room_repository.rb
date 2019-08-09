@@ -11,7 +11,7 @@ class PlayerRoomRepository < Hanami::Repository
     player_rooms.read(
       "SELECT players.name, player_rooms.position, player_rooms.player_id FROM player_rooms JOIN players ON players.id = player_rooms.player_id WHERE room_id = #{
         room_id
-      }"
+      } ORDER BY player_rooms.position DESC"
     )
       .map
       .to_a
@@ -21,7 +21,7 @@ class PlayerRoomRepository < Hanami::Repository
     player_rooms.read(
       "SELECT players.name, player_rooms.player_id, player_rooms.words_typed, player_rooms.time, player_rooms.mistakes, player_rooms.letters_typed FROM player_rooms JOIN players ON players.id = player_rooms.player_id WHERE room_id = #{
         room_id
-      } AND player_rooms.words_typed IS NOT NULL"
+      } AND player_rooms.words_typed IS NOT NULL ORDER BY player_rooms.time"
     )
       .map
       .to_a
