@@ -1,5 +1,6 @@
 require './lib/middleware/websocket/interactors/updates/join_update'
 require './lib/middleware/websocket/interactors/updates/race_update'
+require './lib/middleware/websocket/interactors/updates/room_update'
 require './lib/typinggame_server/interactors/players/fetch_player'
 require './lib/typinggame_server/interactors/rooms/fetch_room'
 require './lib/typinggame_server/interactors/players_rooms/create_player_room'
@@ -15,6 +16,9 @@ module Websocket
 
           player = fetch_player(uuid: uuid)
           room = fetch_room(id: room_id)
+
+          return if game_started?(room: room, connection: connection)
+
           connection.subscribe "#{room.id}"
 
           build_association(player_id: player.id, room_id: room.id)
@@ -65,6 +69,16 @@ module Websocket
               .player_room_record
 
           !player_room_record.nil?
+        end
+
+        def game_started?(room:, connection:)
+          if room.game_started
+            RoomUpdate.new.call(
+              connection: connection, game_started: room.game_started
+            )
+          end
+
+          room.game_started
         end
       end
     end

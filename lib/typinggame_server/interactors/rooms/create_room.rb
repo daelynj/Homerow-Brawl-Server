@@ -12,7 +12,7 @@ module Interactors
       end
 
       def call
-        @room = @rooms_repository.create(players: 0)
+        @room = @rooms_repository.create(game_started: false)
       end
     end
   end
