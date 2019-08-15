@@ -10,14 +10,14 @@ To utilize this functionality in Hanami you are required to write your own Rack 
 
 Authentication for persistent user accounts are through Slack OAuth and maintined here in a postgresql database.
 
-Some noteable features:
+The idea for this application is to provide a typing competition between geographically separate offices in an organization. By integrating with Slack through OAuth with a Slack application, your workspace can compete in typing races against each other in different rooms and groups at any time.
+
+## Some noteable features:
 - websockets
 - Slack authentication
 - Persistent `Player` entities with game stats
 - pub/sub support
 - Game rooms
-
-The idea for this application is to provide a typing competition between geographically separate offices in an organization. By integrating with Slack through OAuth with a Slack application, your workspace can compete in typing races against each other in different rooms and groups at any time.
 
 ## Setup
 
