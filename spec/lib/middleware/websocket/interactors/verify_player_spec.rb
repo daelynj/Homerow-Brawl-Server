@@ -21,7 +21,9 @@ RSpec.describe Websocket::Interactor::VerifyPlayer do
     end
 
     context 'player is not verified' do
-      subject { described_class.new.call(uuid: 'bad-uuid') }
+      subject do
+        described_class.new.call(uuid: '6a380919-ef98-48c5-8461-12bc5790f2e6')
+      end
 
       it { is_expected.to be(false) }
     end

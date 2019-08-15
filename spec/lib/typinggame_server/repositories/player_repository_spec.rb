@@ -57,7 +57,7 @@ RSpec.describe PlayerRepository, type: :repository do
 
     context 'bad input' do
       let(:result) do
-        repository.find_by_uuid(uuid: '2bbca412-65cc-4e35-a5b3-6a0a0fd')
+        repository.find_by_uuid(uuid: '6a380919-ef98-48c5-8461-12bc5790f2e6')
       end
 
       it 'is unsuccessful' do
