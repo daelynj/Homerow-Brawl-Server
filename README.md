@@ -1,3 +1,5 @@
+[![Build Status](https://travis-ci.com/daelynj/Homerow-Brawl-Server.svg?branch=master)](https://travis-ci.com/daelynj/Homerow-Brawl-Server)
+
 # Homerow Brawl Server
 
 The Homerow Brawl Server is a Ruby web server built with [Iodine](https://github.com/boazsegev/iodine).
