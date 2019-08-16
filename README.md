@@ -1,4 +1,5 @@
 [![Build Status](https://travis-ci.com/daelynj/Homerow-Brawl-Server.svg?branch=master)](https://travis-ci.com/daelynj/Homerow-Brawl-Server)
+[![Maintainability](https://api.codeclimate.com/v1/badges/a99a88d28ad37a79dbf6/maintainability)](https://codeclimate.com/github/codeclimate/codeclimate/maintainability)
 
 # Homerow Brawl Server
 
