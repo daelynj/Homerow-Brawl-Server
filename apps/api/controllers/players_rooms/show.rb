@@ -4,7 +4,21 @@ module Api
       class Show
         include Api::Action
 
-        def call(params)
+        expose :player_stats
+
+        def initialize(
+          interactor: Interactors::PlayersRooms::FetchPlayerGlobalStats.new
+        )
+          @fetch_player_global_stats = interactor
+        end
+
+        def call(_params)
+          uuid = JSON.parse(request.env['HTTP_UUID'])
+
+          @player_stats =
+            @fetch_player_global_stats.call(uuid: uuid).player_stats
+
+          halt 400 && self.status = 400 if @player_stats.nil?
         end
       end
     end
