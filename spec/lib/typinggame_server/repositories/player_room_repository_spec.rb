@@ -63,6 +63,19 @@ RSpec.describe PlayerRoomRepository, type: :repository do
         expect(subject.room_id).to eq(room.id)
       end
     end
+
+    context 'retrieiving all players_rooms_records with a player_id' do
+      subject { repository.find_player_room_records(player_id: player_1.id) }
+
+      before do
+        create_player_room.call(player_id: player_1.id, room_id: room.id)
+      end
+
+      it 'returns all player_rooms rows with given player_id' do
+        expect(subject.length).to eq(1)
+        expect(subject.first.player_id).to eq(player_1.id)
+      end
+    end
   end
 
   describe '#find_players_names_positions' do
