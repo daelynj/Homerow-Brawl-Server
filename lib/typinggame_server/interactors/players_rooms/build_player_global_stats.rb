@@ -66,10 +66,10 @@ module Interactors
         average_letters_typed = total_letters_typed / games_played.size
 
         {
-          average_wpm: average_wpm,
-          average_accuracy: average_accuracy,
+          average_wpm: average_wpm.round,
+          average_accuracy: average_accuracy.round(1),
           total_mistakes: total_mistakes,
-          average_mistakes: average_mistakes,
+          average_mistakes: average_mistakes.round,
           total_words_typed: total_words_typed,
           average_words_typed: average_words_typed,
           total_letters_typed: total_letters_typed,
