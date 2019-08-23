@@ -9,7 +9,7 @@ This server supports the [Homerow Brawl Client](https://github.com/daelynj/Homer
 
 By default, Hanami does not support websockets; for websocket support you have to look elsewhere. Fortunately [Iodine](https://github.com/boazsegev/iodine) is a Rack server that provides websocket and pub/sub support.
 
-To utilize this functionality in Hanami you are required to write your own Rack middleware that routes incoming websocket requests to some application you have written to handle websocket traffic. You can't find anything like this on the internet so I will provide a guide for achieving this in the future.
+To utilize this functionality in Hanami you are required to write your own Rack middleware that routes incoming websocket requests to some application you have written to handle websocket traffic. You can't find anything like this on the internet so I wrote a [handy guide](https://github.com/daelynj/Homerow-Brawl-Server/wiki/How-to-add-websockets-to-Hanami) on how to add websockets to Hanami
 
 Authentication for persistent user accounts are through Slack OAuth and maintained here in a postgresql database.
 
