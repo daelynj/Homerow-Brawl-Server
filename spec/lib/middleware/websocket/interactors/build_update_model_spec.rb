@@ -72,5 +72,24 @@ RSpec.describe Websocket::Interactor::BuildUpdateModel do
 
       it { is_expected.to be_a(Websocket::Interactor::Model::StatsUpdate) }
     end
+
+    context 'a state request update' do
+      let(:update) do
+        {
+          'type' => 'state_request',
+          'uuid' => '25b26b4e-b0c2-49b0-bb06-3dc707cb7c6c'
+        }
+      end
+
+      subject do
+        build_update_model.call(update: update, connection: connection)
+      end
+
+      it 'is a state request update' do
+        expect(subject).to be_a(
+          Websocket::Interactor::Model::StateRequestUpdate
+        )
+      end
+    end
   end
 end

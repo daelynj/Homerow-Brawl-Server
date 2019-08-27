@@ -4,12 +4,11 @@ module Websocket
   class Connection
     def initialize(app)
       @app = app
-      @controller = Controller.new
     end
 
     def call(env)
       if env['rack.upgrade?'.freeze] == :websocket
-        env['rack.upgrade'.freeze] = @controller
+        env['rack.upgrade'.freeze] = Controller.new
         return [200, {}, []]
       end
 

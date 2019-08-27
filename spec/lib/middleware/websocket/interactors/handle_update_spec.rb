@@ -71,17 +71,6 @@ RSpec.describe Websocket::Interactor::HandleUpdate do
 
         expect(player_room_record.position).to eq(30)
       end
-
-      it 'sends all players in the room a race update' do
-        expect(connection).to receive(:publish).with(
-          "#{room.id}",
-          "{\"type\":\"position\",\"players\":[{\"id\":#{
-            player.id
-          },\"name\":\"octane\",\"position\":30}]}"
-        )
-
-        subject
-      end
     end
 
     context 'when the client sends a position update with an improper UUID' do
@@ -144,6 +133,27 @@ RSpec.describe Websocket::Interactor::HandleUpdate do
           "{\"type\":\"stats\",\"players\":[{\"id\":#{
             player.id
           },\"name\":\"octane\",\"words_typed\":15,\"time\":4,\"mistakes\":3,\"accuracy\":96.0,\"wpm\":225}]}"
+        )
+
+        subject
+      end
+    end
+
+    context 'when a player sends a race state request' do
+      let(:update_model) do
+        Websocket::Interactor::Model::StateRequestUpdate.new(uuid: player.uuid)
+      end
+
+      subject do
+        handle_update.call(update_model: update_model, connection: connection)
+      end
+
+      it 'sends all players in the room a race update' do
+        expect(connection).to receive(:publish).with(
+          "#{room.id}",
+          "{\"type\":\"position\",\"players\":[{\"id\":#{
+            player.id
+          },\"name\":\"octane\",\"position\":0}]}"
         )
 
         subject

@@ -18,6 +18,9 @@ RSpec.describe Websocket::Controller do
   let(:create_player_room_record) do
     Interactors::PlayersRooms::CreatePlayerRoom.new
   end
+  let(:fetch_player_room_record) do
+    Interactors::PlayersRooms::FetchPlayerRoom.new
+  end
 
   describe '#on_message' do
     before do
@@ -51,11 +54,15 @@ RSpec.describe Websocket::Controller do
         }.to_json
       end
 
-      subject { described_class.new.on_message(connection, data) }
+      subject do
+        fetch_player_room_record.call(player_id: player.id, room_id: room.id)
+          .player_room_record
+      end
 
-      it 'handles the message' do
-        expect(connection).to receive(:publish)
-        subject
+      before { described_class.new.on_message(connection, data) }
+
+      it 'updates a players position' do
+        expect(subject.position).to eq(30)
       end
     end
 
@@ -67,6 +74,17 @@ RSpec.describe Websocket::Controller do
       subject { described_class.new.on_message(connection, data) }
 
       it 'handles the message' do
+        expect(connection).to receive(:publish)
+        subject
+      end
+    end
+
+    context 'state request update' do
+      let(:data) { { type: 'state_request', uuid: player.uuid }.to_json }
+
+      subject { described_class.new.on_message(connection, data) }
+
+      it 'sends a race update' do
         expect(connection).to receive(:publish)
         subject
       end
