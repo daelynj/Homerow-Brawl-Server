@@ -1,6 +1,7 @@
 require './lib/middleware/websocket/interactors/models/updates/join_update'
 require './lib/middleware/websocket/interactors/models/updates/race_update'
 require './lib/middleware/websocket/interactors/models/updates/countdown_update'
+require './lib/middleware/websocket/interactors/models/updates/state_request_update'
 
 module Websocket
   module Interactor
@@ -32,6 +33,8 @@ module Websocket
             mistakes: update['mistakes'],
             letters_typed: update['letters_typed']
           )
+        when 'state_request'
+          Model::StateRequestUpdate.new(uuid: update['uuid'])
         else
           raise InvalidType
         end

@@ -3,6 +3,7 @@ require './lib/middleware/websocket/interactors/handlers/handle_join_update'
 require './lib/middleware/websocket/interactors/handlers/handle_position_update'
 require './lib/middleware/websocket/interactors/handlers/handle_countdown_update'
 require './lib/middleware/websocket/interactors/handlers/handle_stats_update'
+require './lib/middleware/websocket/interactors/handlers/handle_state_request_update'
 
 module Websocket
   module Interactor
@@ -32,6 +33,10 @@ module Websocket
         when 'stats'
           Handler::HandleStatsUpdate.new.call(
             connection: connection, room_id: room_id, update_model: update_model
+          )
+        when 'state_request'
+          Handler::HandleStateRequestUpdate.new.call(
+            connection: connection, room_id: room_id
           )
         end
       end

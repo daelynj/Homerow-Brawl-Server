@@ -9,7 +9,7 @@ module Websocket
           update_player_position(
             player_id: player_id, position: position, room_id: room_id
           )
-          RaceUpdate.new.call(connection: connection, room_id: room_id)
+          #RaceUpdate.new.call(connection: connection, room_id: room_id)
         end
 
         private
