@@ -18,6 +18,7 @@ module Interactors
 
         records =
           @player_room_repository.find_player_room_records(player_id: player.id)
+            .reverse
 
         @player_stats =
           BuildPlayerGlobalStats.new.call(records: records).player_stats
