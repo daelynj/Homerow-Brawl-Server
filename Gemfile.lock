@@ -120,7 +120,7 @@ GEM
       url_mount (~> 0.2.1)
     ice_nine (0.11.2)
     inflecto (0.0.2)
-    iodine (0.7.33)
+    iodine (0.7.34)
     jaro_winkler (1.5.3)
     mail (2.7.1)
       mini_mime (>= 0.1.1)
